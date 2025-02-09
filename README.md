@@ -6,3 +6,6 @@
 5. Wearable Device Integration – Sync with smartwatches.
 6. Reps & Form Detection – Use phone sensors to count reps and analyze posture.
 7. Voice Assistant Commands – Control workouts via voice.
+
+- User authentication ✅
+- Next: Automatic login and home screen
