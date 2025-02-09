@@ -1,8 +1,8 @@
 # Features
-User Profiles – Allow users to create accounts, and track progress.
-Workout Plans – Pre-built and customizable workout routines.
-Activity Tracking – Track steps, calories burned, and workout history.
-Nutrition Tracking – Log meals, and track macros.
-Wearable Device Integration – Sync with smartwatches.
-Reps & Form Detection – Use phone sensors to count reps and analyze posture.
-Voice Assistant Commands – Control workouts via voice.
+1. User Profiles – Allow users to create accounts, and track progress.
+2. Workout Plans – Pre-built and customizable workout routines.
+3. Activity Tracking – Track steps, calories burned, and workout history.
+4. Nutrition Tracking – Log meals, and track macros.
+5. Wearable Device Integration – Sync with smartwatches.
+6. Reps & Form Detection – Use phone sensors to count reps and analyze posture.
+7. Voice Assistant Commands – Control workouts via voice.
