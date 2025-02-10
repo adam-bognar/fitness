@@ -1,9 +1,5 @@
 package com.fitness.screens.sing_in
 
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.fitness.MainActivity
 import com.fitness.data.auth.AccountService
 import com.fitness.model.AppViewModel
 import com.fitness.navigation.Screen

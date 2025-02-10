@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import com.fitness.screens.Test
 import com.fitness.screens.sing_in.SignIn
 import com.fitness.screens.sing_up.SignUp
+import com.fitness.screens.splash.Splash
 
 @Composable
 fun NavGraph(
@@ -15,8 +16,16 @@ fun NavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screen.SIGN_IN.route
+        startDestination = Screen.SPLASH.route
     ) {
+        composable(Screen.SPLASH.route) {
+            Splash(
+                openAndPopUp = { destination ->
+                    navController.navigate(destination)
+                }
+            )
+        }
+
         composable(Screen.SIGN_IN.route) {
             SignIn(
                 open = { destination ->
