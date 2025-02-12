@@ -79,15 +79,6 @@ class RoutineViewModel @Inject constructor(
         }
     }
 
-    fun save() {
-        viewModelScope.launch {
-            try {
-                repository.save()
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-    }
 
 
 }

@@ -21,10 +21,8 @@ class RoutinesRepositoryImpl @Inject constructor(
     private val _routinesFlow = MutableStateFlow<List<Routine>>(emptyList())
 
     init {
-        // Listen to Firestore updates and keep the flow updated
         collection.addSnapshotListener { snapshot, exception ->
             if (exception != null) {
-                // Handle exception (log it or propagate)
                 return@addSnapshotListener
             }
 
@@ -52,14 +50,4 @@ class RoutinesRepositoryImpl @Inject constructor(
         return _routinesFlow.value.maxOfOrNull { it.id } ?: 0
     }
 
-
-    override suspend fun save() {
-        val routines = _routinesFlow.value
-        for (routine in routines) {
-            val routineDoc = collection.document(routine.id.toString())
-            routineDoc.set(routine).addOnFailureListener { exception ->
-                // Handle exception
-            }
-        }
-    }
 }

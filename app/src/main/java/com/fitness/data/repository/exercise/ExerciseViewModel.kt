@@ -6,70 +6,51 @@ import com.fitness.model.Exercise
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ExerciseViewModel @Inject constructor(
-    private val repository: IExerciseRepository
+    private val userExerciseRepository: IUserExerciseRepository,
+    private val globalExerciseRepository: IGlobalExerciseRepository
 ) : ViewModel() {
-    private val _list = MutableStateFlow<List<Exercise>>(listOf())
-    val list = _list.asStateFlow()
+
+    private val _userExercises = MutableStateFlow<List<Exercise>>(listOf())
+    val userExercises = _userExercises.asStateFlow()
+
+    private val _globalExercises = MutableStateFlow<List<Exercise>>(listOf())
+    val globalExercises = _globalExercises.asStateFlow()
 
     init {
-        getAllExercises()
+        getUserExercises()
+        getGlobalExercises()
     }
 
-    private fun getAllExercises() {
+    private fun getUserExercises() {
         viewModelScope.launch {
-            repository.getAllExercises().collectLatest {
-                _list.tryEmit(it)
+            userExerciseRepository.getAllExercises().collect {
+                _userExercises.value = it
             }
         }
     }
 
-    fun exerciseCount(): Int {
-        return _list.value.size
-    }
-
-    fun getExercise(index: Int): Exercise {
-        for (exercise in _list.value) {
-            if (exercise.id == index) {
-                return exercise
-            }
-        }
-        return Exercise()
-    }
-
-    fun exerciseExists(id: Int): Boolean {
-        for (exercise in _list.value) {
-            if (exercise.id == id) {
-                return true
-            }
-        }
-        return false
-    }
-
-    fun upsert(item: Exercise) {
+    private fun getGlobalExercises() {
         viewModelScope.launch {
-            try {
-                repository.upsert(item)
-            } catch (e: Exception) {
-                e.printStackTrace()
+            globalExerciseRepository.getAllExercises().collect {
+                _globalExercises.value = it
             }
         }
     }
 
-    fun delete(item: Exercise) {
+    fun upsertUserExercise(exercise: Exercise) {
         viewModelScope.launch {
-            try {
-                repository.delete(item)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+            userExerciseRepository.upsert(exercise)
         }
     }
 
-
+    fun deleteUserExercise(exercise: Exercise) {
+        viewModelScope.launch {
+            userExerciseRepository.delete(exercise)
+        }
+    }
 }

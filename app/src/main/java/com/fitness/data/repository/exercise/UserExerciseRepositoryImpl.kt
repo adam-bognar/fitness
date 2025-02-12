@@ -9,10 +9,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class ExerciseRepositoryImpl @Inject constructor(
+class UserExerciseRepositoryImpl @Inject constructor(
     db: FirebaseFirestore,
     accountService: AccountService
-): IExerciseRepository {
+): IUserExerciseRepository {
 
     private val user = accountService.currentUserId
 

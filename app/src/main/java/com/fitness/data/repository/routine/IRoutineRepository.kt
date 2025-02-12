@@ -9,5 +9,4 @@ interface IRoutineRepository {
     suspend fun upsert(routine: Routine)
     suspend fun delete(routine: Routine)
     suspend fun highestId(): Int
-    suspend fun save()
 }
