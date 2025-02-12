@@ -5,10 +5,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.fitness.screens.Test
-import com.fitness.screens.sing_in.SignIn
-import com.fitness.screens.sing_up.SignUp
+import com.fitness.model.Routine
+import com.fitness.screens.home.Home
+import com.fitness.screens.sign_in.SignIn
+import com.fitness.screens.sign_up.SignUp
 import com.fitness.screens.splash.Splash
+import com.fitness.screens.workout.routine.EditRoutine
+import com.fitness.screens.workout.routine.Routines
 
 @Composable
 fun NavGraph(
@@ -41,8 +44,31 @@ fun NavGraph(
             )
 
         }
-        composable(Screen.TEST.route) {
-            Test()
+        composable(Screen.HOME.route) {
+            Home(
+                onActivityClick = { destination ->
+                    navController.navigate(destination)
+                }
+            )
+        }
+        composable(Screen.WORKOUT.route) {
+            // Workout()
+            Routines(
+                onStart = {
+                    //navController.navigate()
+                },
+                onEdit = {
+                    navController.navigate(Screen.EDIT_ROUTINE.route)
+                }
+            )
+        }
+        composable(Screen.EDIT_ROUTINE.route) {
+            EditRoutine(
+                routine = Routine(),
+                onBack = {
+                    navController.popBackStack()
+                }
+            )
         }
     }
 }

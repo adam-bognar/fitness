@@ -1,9 +1,5 @@
 package com.fitness.screens.splash
 
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.fitness.MainActivity
 import com.fitness.data.auth.AccountService
 import com.fitness.model.AppViewModel
 import com.fitness.navigation.Screen
@@ -18,7 +14,7 @@ class SplashViewModel @Inject constructor(
   fun onAppStart(openAndPopUp: (String) -> Unit) {
     if (accountService.hasUser()){
 
-        openAndPopUp(Screen.TEST.route)
+        openAndPopUp(Screen.HOME.route)
     }
     else openAndPopUp(Screen.SIGN_IN.route)
   }

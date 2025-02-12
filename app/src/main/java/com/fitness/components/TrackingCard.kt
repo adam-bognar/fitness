@@ -36,6 +36,7 @@ fun TrackingCard(
             .clip(RoundedCornerShape(16.dp))
             .background(Color.White)
             .padding(12.dp)
+
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically

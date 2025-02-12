@@ -1,4 +1,4 @@
-package com.fitness.screens.sing_up
+package com.fitness.screens.sign_up
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -36,9 +36,7 @@ fun SignUp(
     viewModel: SignUpViewModel = hiltViewModel(),
 ) {
 
-    val email =  viewModel.email.collectAsState()
-    val password =  viewModel.password.collectAsState()
-    val confirmPassword = viewModel.confirmPassword.collectAsState()
+    val uiState = viewModel.uiState.collectAsState().value
 
     Box(
         modifier = Modifier
@@ -60,7 +58,7 @@ fun SignUp(
             )
 
             OutlinedTextField(
-                value = email.value,
+                value = uiState.email,
                 onValueChange = {
                     viewModel.updateEmail(it)
                                 },
@@ -84,7 +82,7 @@ fun SignUp(
                 )
             )
             OutlinedTextField(
-                value = password.value,
+                value = uiState.password,
                 onValueChange = {
                     viewModel.updatePassword(it)
                                 },
@@ -109,7 +107,7 @@ fun SignUp(
                 )
             )
             OutlinedTextField(
-                value = confirmPassword.value,
+                value = uiState.confirmPassword,
                 onValueChange = {
                     viewModel.updateConfirmPassword(it)
                                 },

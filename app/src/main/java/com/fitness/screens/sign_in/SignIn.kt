@@ -1,4 +1,4 @@
-package com.fitness.screens.sing_in
+package com.fitness.screens.sign_in
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -21,8 +21,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -39,8 +37,7 @@ fun SignIn(
 )
 
 {
-    val email = viewModel.email.collectAsState()
-    val password = viewModel.password.collectAsState()
+    val uiState = viewModel.uiState.collectAsState().value
 
     Box(
         modifier = Modifier
@@ -61,7 +58,7 @@ fun SignIn(
             )
 
             OutlinedTextField(
-                value = email.value,
+                value = uiState.email,
                 onValueChange = {
                     viewModel.updateEmail(it)
                                 },
@@ -85,7 +82,7 @@ fun SignIn(
                 )
             )
             OutlinedTextField(
-                value = password.value,
+                value = uiState.password,
                 onValueChange = {
                    viewModel.updatePassword(it)
                                 },

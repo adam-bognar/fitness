@@ -1,31 +1,38 @@
-package com.fitness.screens.sing_in
+package com.fitness.screens.sign_in
 
 import com.fitness.data.auth.AccountService
 import com.fitness.model.AppViewModel
+import com.fitness.model.SignInUiState
 import com.fitness.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
+
+
 
 @HiltViewModel
 class SignInViewModel @Inject constructor(
     private val accountService: AccountService,
 ) : AppViewModel() {
-   val email = MutableStateFlow("")
-    val password = MutableStateFlow("")
+
+
+   private val _uiState = MutableStateFlow(SignInUiState())
+    val uiState: StateFlow<SignInUiState> = _uiState.asStateFlow()
 
     fun updateEmail(email: String) {
-        this.email.value = email
+        _uiState.value = _uiState.value.copy(email = email)
     }
 
     fun updatePassword(password: String) {
-        this.password.value = password
+        _uiState.value = _uiState.value.copy(password = password)
     }
 
     fun onSignInClick(openAndPopUp: (String) -> Unit) {
         launchCatching {
-            accountService.signIn(email.value, password.value)
-            openAndPopUp(Screen.TEST.route)
+            accountService.signIn(uiState.value.email, uiState.value.password)
+            openAndPopUp(Screen.HOME.route)
         }
     }
 

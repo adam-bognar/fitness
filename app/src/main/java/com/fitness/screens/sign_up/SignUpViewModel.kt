@@ -1,38 +1,39 @@
-package com.fitness.screens.sing_up
+package com.fitness.screens.sign_up
 
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.fitness.MainActivity
 import com.fitness.data.auth.AccountService
 import com.fitness.model.AppViewModel
+import com.fitness.model.SignUpUiState
 import com.fitness.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
+
+
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
     private val accountService: AccountService,
 ) : AppViewModel() {
-   val email = MutableStateFlow("")
-    val password = MutableStateFlow("")
-    val confirmPassword = MutableStateFlow("")
+
+    private val _uiState = MutableStateFlow(SignUpUiState())
+    val uiState: StateFlow<SignUpUiState> = _uiState.asStateFlow()
 
     fun updateEmail(email: String) {
-        this.email.value = email
+        _uiState.value = _uiState.value.copy(email = email)
     }
 
     fun updatePassword(password: String) {
-        this.password.value = password
+        _uiState.value = _uiState.value.copy(password = password)
     }
 
     fun updateConfirmPassword(confirmPassword: String) {
-        this.confirmPassword.value = confirmPassword
+        _uiState.value = _uiState.value.copy(confirmPassword = confirmPassword)
     }
 
     private fun passwordsMatch(): Boolean {
-        return password.value == confirmPassword.value
+        return uiState.value.password == uiState.value.confirmPassword
     }
 
     fun onSignInClick(openAndPopUp: (String) -> Unit) {
@@ -48,9 +49,9 @@ class SignUpViewModel @Inject constructor(
             return
         }
         launchCatching {
-            accountService.signUp(email.value, password.value)
+            accountService.signUp(uiState.value.email, uiState.value.password)
 
-            openAndPopUp(Screen.TEST.route)
+            openAndPopUp(Screen.HOME.route)
 
         }
     }
