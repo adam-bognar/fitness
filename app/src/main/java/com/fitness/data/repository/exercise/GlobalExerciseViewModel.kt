@@ -10,28 +10,15 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ExerciseViewModel @Inject constructor(
-    private val userExerciseRepository: IUserExerciseRepository,
+class GlobalExerciseViewModel @Inject constructor(
     private val globalExerciseRepository: IGlobalExerciseRepository
 ) : ViewModel() {
-
-    private val _userExercises = MutableStateFlow<List<Exercise>>(listOf())
-    val userExercises = _userExercises.asStateFlow()
 
     private val _globalExercises = MutableStateFlow<List<Exercise>>(listOf())
     val globalExercises = _globalExercises.asStateFlow()
 
     init {
-        getUserExercises()
         getGlobalExercises()
-    }
-
-    private fun getUserExercises() {
-        viewModelScope.launch {
-            userExerciseRepository.getAllExercises().collect {
-                _userExercises.value = it
-            }
-        }
     }
 
     private fun getGlobalExercises() {
@@ -39,18 +26,6 @@ class ExerciseViewModel @Inject constructor(
             globalExerciseRepository.getAllExercises().collect {
                 _globalExercises.value = it
             }
-        }
-    }
-
-    fun upsertUserExercise(exercise: Exercise) {
-        viewModelScope.launch {
-            userExerciseRepository.upsert(exercise)
-        }
-    }
-
-    fun deleteUserExercise(exercise: Exercise) {
-        viewModelScope.launch {
-            userExerciseRepository.delete(exercise)
         }
     }
 }

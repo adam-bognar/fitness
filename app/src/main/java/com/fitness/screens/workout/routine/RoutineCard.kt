@@ -34,7 +34,7 @@ import com.fitness.model.Routine
 fun RoutineCard(
     routine: Routine,
     onStart: () -> Unit,
-    onEdit: () -> Unit,
+    onEdit: (Int) -> Unit,
     onDelete: () -> Unit,
 ) {
     Column(
@@ -71,7 +71,7 @@ fun RoutineCard(
                         tint = Color.Red
                     )
                 }
-                IconButton(onClick = onEdit) {
+                IconButton(onClick = { onEdit(routine.id) }) {
                     Icon(
                         imageVector = Icons.Default.Edit,
                         contentDescription = "Edit Routine",

@@ -113,8 +113,7 @@ fun SelectExercisePopUp(
                         BasicExerciseCard(
                             name = "Exercise $index",
                             onClick = {
-
-                                //onExerciseSelected(it)
+                                onExerciseSelected(Exercise(name = it, id = index))
                             }
                         )
                     }

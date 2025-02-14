@@ -2,9 +2,11 @@ package com.fitness.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.fitness.model.Routine
 import com.fitness.screens.home.Home
 import com.fitness.screens.sign_in.SignIn
@@ -12,6 +14,8 @@ import com.fitness.screens.sign_up.SignUp
 import com.fitness.screens.splash.Splash
 import com.fitness.screens.workout.routine.EditRoutine
 import com.fitness.screens.workout.routine.Routines
+import com.fitness.screens.workout.session.WorkoutPage
+import com.google.gson.Gson
 
 @Composable
 fun NavGraph(
@@ -52,22 +56,43 @@ fun NavGraph(
             )
         }
         composable(Screen.WORKOUT.route) {
-            // Workout()
             Routines(
-                onStart = {
-                    //navController.navigate()
+                onStart = { routine ->
+                    val routineJson = Gson().toJson(routine)
+                    navController.navigate("${Screen.WORKOUT_SESSION.route}/$routineJson")
                 },
-                onEdit = {
-                    navController.navigate(Screen.EDIT_ROUTINE.route)
+                onEdit = {id ->
+                    navController.navigate("${Screen.EDIT_ROUTINE.route}/$id")
                 }
             )
         }
-        composable(Screen.EDIT_ROUTINE.route) {
+        composable(
+            route =  "${Screen.EDIT_ROUTINE.route}/{routineID}",
+            arguments = listOf(navArgument("routineID") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val routineID = backStackEntry.arguments?.getInt("routineID") ?: 0
             EditRoutine(
-                routine = Routine(),
+                routineID = routineID,
                 onBack = {
                     navController.popBackStack()
                 }
+            )
+        }
+
+        composable(
+           route =  "${Screen.WORKOUT_SESSION.route}/{routine}",
+              arguments = listOf(navArgument("routine") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val routineJson = backStackEntry.arguments?.getString("routine")
+            val routine = Gson().fromJson(routineJson, Routine::class.java)
+            WorkoutPage(
+                routine = routine,
+                onNavigateBack = {
+                    navController.popBackStack()
+                },
+                onNavigateToExerciseAdd = {
+                    //TODO
+                },
             )
         }
     }

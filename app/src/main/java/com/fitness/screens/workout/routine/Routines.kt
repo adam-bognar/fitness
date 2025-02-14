@@ -29,8 +29,8 @@ import com.fitness.screens.home.TopAppBar
 
 @Composable
 fun Routines(
-    onStart: () -> Unit,
-    onEdit: () -> Unit,
+    onStart: (Routine) -> Unit,
+    onEdit: (Int) -> Unit,
     viewModel: RoutineViewModel = hiltViewModel()
 ) {
 //    val routines: List<Routine> = listOf(
@@ -92,8 +92,8 @@ fun Routines(
                 items(routines.size) { index ->
                     RoutineCard(
                         routine = routines[index],
-                        onStart = onStart,
-                        onEdit = onEdit,
+                        onStart = { onStart(routines[index]) },
+                        onEdit = { onEdit(routines[index].id) },
                         onDelete = {
                             viewModel.delete(routines[index])
                         },
@@ -110,7 +110,7 @@ fun Routines(
                         AddRoutineCard(
                             onCreate = { name ->
                                 val routine = Routine(
-                                    id = viewModel.routineCount() + 1,
+                                    id = viewModel.highestId() + 1,
                                     name = name,
                                     description = "",
                                     exercises = emptyList()

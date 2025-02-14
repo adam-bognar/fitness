@@ -10,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,8 +23,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.fitness.R
+import com.fitness.data.repository.exercise.UserExerciseViewModel
 import com.fitness.data.repository.routine.RoutineViewModel
-import com.fitness.model.Exercise
 import com.fitness.model.Routine
 import com.fitness.screens.home.TopAppBar
 import com.fitness.screens.workout.exercise.AddExerciseButton
@@ -32,11 +33,17 @@ import com.fitness.screens.workout.exercise.SelectExercisePopUp
 
 @Composable
 fun EditRoutine(
-    routine: Routine,
+    routineID: Int,
     onBack: () -> Unit,
-    viewModel: RoutineViewModel = hiltViewModel()
+    routineViewModel: RoutineViewModel = hiltViewModel(),
+    exerciseViewModel: UserExerciseViewModel = hiltViewModel(),
+
 ) {
     var addExercise by remember { mutableStateOf(false) }
+    val routine by routineViewModel.list.collectAsState()
+    val currentRoutine = routine.firstOrNull { it.id == routineID } ?: Routine()
+
+
 
 
     Box{
@@ -56,7 +63,7 @@ fun EditRoutine(
                 .padding(16.dp)
             ) {
                 Text(
-                    text = routine.name,
+                    text = currentRoutine.name,
                     style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.SemiBold,
                 )
@@ -65,12 +72,13 @@ fun EditRoutine(
                     modifier = Modifier
                         .fillMaxSize()
                 ) {
-                    items(routine.exercises.size) { index ->
+                    items(currentRoutine.exercises.size) { index ->
                         ExerciseCard(
-                            name = routine.exercises[index].name,
+                            name = currentRoutine.exercises[index].name,
                             onDelete = {
-                                routine.exercises.toMutableList().removeAt(index)
-                                viewModel.upsert(routine)
+                                val updatedExercises = currentRoutine.exercises.toMutableList().apply { removeAt(index) }
+                                val updatedRoutine = currentRoutine.copy(exercises = updatedExercises)
+                                routineViewModel.upsert(updatedRoutine)
                             }
                         )
                     }
@@ -86,6 +94,10 @@ fun EditRoutine(
         if(addExercise){
             SelectExercisePopUp(
                 onExerciseSelected = {
+                    currentRoutine.exercises += it
+                    routineViewModel.upsert(currentRoutine)
+                    exerciseViewModel.upsertUserExercise(it)
+                    addExercise = false
 
                 },
                 onDismiss = { addExercise = false },
@@ -102,19 +114,8 @@ fun EditRoutine(
 @Composable
 fun EditRoutinePreview(){
     EditRoutine(
-        routine = Routine(
-            name = "Routine 1",
-            description = "Description 1",
-            exercises = listOf(
-                Exercise(name = "ize", id = 1),
-                Exercise(name = "ize", id = 1),
-                Exercise(name = "ize", id = 1),
-                Exercise(name = "ize", id = 1),
-                Exercise(name = "ize", id = 1),
-                Exercise(name = "ize", id = 1),),
-
-            id =   1),
-        onBack = {}
+        1,
+        onBack = {},
     )
 
 
