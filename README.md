@@ -10,4 +10,5 @@
 9. Voice Assistant Commands – Control workouts via voice. 05.08
 
 - User authentication using firebase custom auth ✅
-- Next: Automatic login and workout plans. 
+- Workout Plans ✅
+- Next: Nutrition Tracking
