@@ -6,8 +6,12 @@ import com.fitness.data.repository.exercise.GlobalExerciseRepositoryImpl
 import com.fitness.data.repository.exercise.IGlobalExerciseRepository
 import com.fitness.data.repository.exercise.IUserExerciseRepository
 import com.fitness.data.repository.exercise.UserExerciseRepositoryImpl
+import com.fitness.data.repository.macros.IMacrosRepository
+import com.fitness.data.repository.macros.MacrosRepositoryImpl
 import com.fitness.data.repository.routine.IRoutineRepository
 import com.fitness.data.repository.routine.RoutinesRepositoryImpl
+import com.fitness.data.repository.user_information.IUserInformationRepository
+import com.fitness.data.repository.user_information.UserInfoRepoImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -41,5 +45,17 @@ abstract class RepositoryModule {
     abstract fun bindGlobalExerciseRepository(
         globalExerciseRepositoryImpl: GlobalExerciseRepositoryImpl
     ): IGlobalExerciseRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindMacrosRepository(
+        macrosRepositoryImpl: MacrosRepositoryImpl
+    ): IMacrosRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindUserInformationRepository(
+        userInformationRepositoryImpl: UserInfoRepoImpl
+    ): IUserInformationRepository
 
 }

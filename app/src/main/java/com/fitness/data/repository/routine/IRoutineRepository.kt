@@ -1,7 +1,7 @@
 
 package com.fitness.data.repository.routine
 
-import com.fitness.model.Routine
+import com.fitness.model.gym.Routine
 import kotlinx.coroutines.flow.Flow
 
 interface IRoutineRepository {

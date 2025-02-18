@@ -3,7 +3,7 @@ package com.fitness.data.repository.routine
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.fitness.model.Routine
+import com.fitness.model.gym.Routine
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

@@ -32,9 +32,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fitness.R
-import com.fitness.model.Exercise
-import com.fitness.model.ExerciseLog
-import com.fitness.model.RepsToWeight
+import com.fitness.model.gym.Exercise
+import com.fitness.model.gym.ExerciseLog
+import com.fitness.model.gym.RepsToWeight
 
 @Composable
 fun WorkoutItem(
@@ -67,7 +67,7 @@ fun WorkoutItem(
             style = TextStyle(
                 fontSize = 20.sp,
                 fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
-                color = Color.White
+                color = Color.Black
             ),
             textAlign = TextAlign.Center
         )

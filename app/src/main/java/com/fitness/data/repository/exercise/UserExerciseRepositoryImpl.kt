@@ -1,7 +1,7 @@
 package com.fitness.data.repository.exercise
 
 import com.fitness.data.auth.AccountService
-import com.fitness.model.Exercise
+import com.fitness.model.gym.Exercise
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,7 +37,9 @@ class UserExerciseRepositoryImpl @Inject constructor(
     override fun getAllExercises(): Flow<List<Exercise>> = _exercisesFlow.asStateFlow()
 
     override suspend fun upsert(exercise: Exercise) {
-        collection.document(exercise.id.toString()).set(exercise).await()
+        collection.document(exercise.id.toString()).set(exercise).addOnSuccessListener {
+            _exercisesFlow.value = _exercisesFlow.value.map { if (it.id == exercise.id) exercise else it }
+        }.await()
     }
 
     override suspend fun delete(exercise: Exercise) {

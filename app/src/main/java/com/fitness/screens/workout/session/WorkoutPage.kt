@@ -1,4 +1,3 @@
-
 package com.fitness.screens.workout.session
 
 import android.util.Log
@@ -43,9 +42,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.fitness.R
 import com.fitness.data.repository.exercise.UserExerciseViewModel
 import com.fitness.data.repository.routine.RoutineViewModel
-import com.fitness.model.Exercise
-import com.fitness.model.Routine
+import com.fitness.model.gym.Exercise
+import com.fitness.model.gym.Routine
 import com.fitness.screens.home.TopAppBar
+import com.fitness.screens.workout.exercise.SelectExercisePopUp
 
 @Composable
 fun WorkoutPage(
@@ -54,7 +54,6 @@ fun WorkoutPage(
     routineViewModel: RoutineViewModel = hiltViewModel(),
     exerciseViewModel: UserExerciseViewModel = hiltViewModel(),
     //sessionViewModel: SessionViewModel = viewModel(factory = SessionViewModel.Factory),
-    onNavigateToExerciseAdd: (routine: Routine) -> Unit,
 ) {
     var exercises by remember { mutableStateOf(routineViewModel.getRoutine(routine.id).exercises) }
     Log.d("WorkoutPage", "exercises: $exercises")
@@ -62,6 +61,7 @@ fun WorkoutPage(
     var showTimerSettings by remember { mutableStateOf(false) }
     var isSwitched by remember { mutableStateOf(true) }
     var timerTime by remember { mutableIntStateOf(120) }
+    var addExercise by remember { mutableStateOf(false) }
 
 
     Box(
@@ -77,14 +77,19 @@ fun WorkoutPage(
             }
         ) { innerPadding ->
             Column(
-                modifier = Modifier.padding(innerPadding).fillMaxSize().background(colorResource(R.color.background))
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .fillMaxSize()
+                    .background(colorResource(R.color.background))
             ) {
 
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(12.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(12.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
-                ){
+                ) {
                     Text(
                         text = routine.name,
                         style = MaterialTheme.typography.titleLarge,
@@ -116,7 +121,8 @@ fun WorkoutPage(
                             shape = RoundedCornerShape(10.dp),
                             colors = ButtonDefaults.buttonColors(colorResource(id = R.color.light_blue))
                         ) {
-                            Text("Finish",
+                            Text(
+                                "Finish",
                                 style = MaterialTheme.typography.titleMedium
                             )
                         }
@@ -141,7 +147,7 @@ fun WorkoutPage(
                     item {
                         TextButton(
                             onClick = {
-                                onNavigateToExerciseAdd(routine.copy(exercises = exercises))
+                                addExercise = true
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -194,6 +200,19 @@ fun WorkoutPage(
                 switchState = isSwitched
             )
         }
+
+        if (addExercise) {
+            SelectExercisePopUp(
+                onExerciseSelected = {
+                    exercises = exercises + it
+                    routineViewModel.upsert(routine.copy(exercises = exercises))
+                    exerciseViewModel.upsertUserExercise(it)
+                    addExercise = false
+                },
+                onDismiss = { addExercise = false },
+                modifier = Modifier.align(Alignment.BottomCenter)
+            )
+        }
     }
 
 }
@@ -222,17 +241,16 @@ fun exercisesToFireBase(exercises: List<Exercise>, exerciseViewModel: UserExerci
 @Composable
 fun WorkoutPagePreview() {
     val exercises = listOf(
-        Exercise(id= 0,name = "Exercise 1"),
-        Exercise(id= 0,name = "Exercise 2"),
-        Exercise(id= 0,name = "Exercise 3"),
+        Exercise(id = 0, name = "Exercise 1"),
+        Exercise(id = 0, name = "Exercise 2"),
+        Exercise(id = 0, name = "Exercise 3"),
     )
 
-    val sampleRoutine = Routine(id = 0,name = "Routine 1", description = "", exercises = exercises)
+    val sampleRoutine = Routine(id = 0, name = "Routine 1", description = "", exercises = exercises)
 
 
     WorkoutPage(
         routine = sampleRoutine,
         onNavigateBack = {},
-        onNavigateToExerciseAdd = {},
     )
 }

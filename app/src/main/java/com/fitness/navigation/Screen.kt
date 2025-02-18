@@ -8,4 +8,6 @@ sealed class Screen(val route: String) {
     object WORKOUT : Screen("WORKOUT")
     object EDIT_ROUTINE : Screen("EDIT_ROUTINE")
     object WORKOUT_SESSION : Screen("WORKOUT_SESSION")
+    object UPLOAD : Screen("UPLOAD")
+    object MACROS : Screen("MACROS")
 }

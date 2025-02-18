@@ -2,7 +2,7 @@ package com.fitness.data.repository.exercise
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.fitness.model.Exercise
+import com.fitness.model.gym.Exercise
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

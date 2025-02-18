@@ -2,7 +2,6 @@ package com.fitness.screens.sign_up
 
 import com.fitness.data.auth.AccountService
 import com.fitness.model.AppViewModel
-import com.fitness.model.SignUpUiState
 import com.fitness.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -25,7 +25,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.fitness.R
 import com.fitness.data.repository.exercise.UserExerciseViewModel
 import com.fitness.data.repository.routine.RoutineViewModel
-import com.fitness.model.Routine
+import com.fitness.model.gym.Routine
 import com.fitness.screens.home.TopAppBar
 import com.fitness.screens.workout.exercise.AddExerciseButton
 import com.fitness.screens.workout.exercise.ExerciseCard

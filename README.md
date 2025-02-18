@@ -11,4 +11,5 @@
 
 - User authentication using firebase custom auth ✅
 - Workout Plans ✅
-- Next: Nutrition Tracking
+- Nutrition Tracking ✅
+- Next: Health api

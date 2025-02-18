@@ -21,6 +21,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,21 +33,26 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.fitness.model.Exercise
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.fitness.data.repository.exercise.GlobalExerciseViewModel
+import com.fitness.model.gym.Exercise
 
 @Composable
 fun SelectExercisePopUp(
     onExerciseSelected: (Exercise) -> Unit,
     onDismiss: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    globalExerciseViewModel: GlobalExerciseViewModel = hiltViewModel()
 ) {
     var search by remember { mutableStateOf("") }
+    val exercises by globalExerciseViewModel.globalExercises.collectAsState()
+    val filteredExercises = exercises.filter { it.name.contains(search, ignoreCase = true) }.sortedBy { it.name }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black.copy(alpha = 0.5f)), // Semi-transparent background
-        contentAlignment = Alignment.Center // Centers the popup in the screen
+            .background(Color.Black.copy(alpha = 0.5f)),
+        contentAlignment = Alignment.Center
     ) {
         Box(
             modifier = Modifier
@@ -109,11 +115,11 @@ fun SelectExercisePopUp(
                         .fillMaxSize()
                         .padding(8.dp)
                 ) {
-                    items(10) { index ->
+                    items(filteredExercises.size) { index ->
                         BasicExerciseCard(
-                            name = "Exercise $index",
+                            name = filteredExercises[index].name,
                             onClick = {
-                                onExerciseSelected(Exercise(name = it, id = index))
+                                onExerciseSelected(Exercise(name = it, id = filteredExercises[index].id))
                             }
                         )
                     }

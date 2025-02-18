@@ -37,7 +37,7 @@ fun ActivityCard(
     Column(
         modifier = Modifier
             .padding(12.dp)
-            .fillMaxWidth(0.5f)
+            .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
             .background(gradient)
             .padding(16.dp)

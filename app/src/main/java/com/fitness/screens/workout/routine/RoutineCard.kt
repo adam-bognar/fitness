@@ -26,8 +26,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.fitness.model.Exercise
-import com.fitness.model.Routine
+import com.fitness.model.gym.Exercise
+import com.fitness.model.gym.Routine
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
