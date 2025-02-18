@@ -1,6 +1,6 @@
 package com.fitness.data.repository.exercise
 
-import com.fitness.model.Exercise
+import com.fitness.model.gym.Exercise
 import kotlinx.coroutines.flow.Flow
 
 interface IUserExerciseRepository {

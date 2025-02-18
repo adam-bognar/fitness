@@ -24,6 +24,7 @@ import com.fitness.components.TrackingCard
 @Composable
 fun Home(
     onActivityClick: (String) -> Unit,
+    onNavigate: (String) -> Unit
 ) {
     val activities = listOf(
         Triple(
@@ -38,6 +39,10 @@ fun Home(
     Scaffold(
         topBar = { TopAppBar(
             alignment = Alignment.Start
+        ) },
+        bottomBar = {
+            BottomBar(
+            onClick = onNavigate
         ) },
         content = { innerPadding ->
             Column(
@@ -96,6 +101,7 @@ fun Home(
 @Composable
 fun HomePreview() {
     Home(
-        onActivityClick = {}
+        onActivityClick = {},
+        onNavigate = {}
     )
 }

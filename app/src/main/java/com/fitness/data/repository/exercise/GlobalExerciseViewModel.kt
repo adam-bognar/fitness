@@ -2,7 +2,7 @@ package com.fitness.data.repository.exercise
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.fitness.model.Exercise
+import com.fitness.model.gym.GlobalExercise
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,7 +14,7 @@ class GlobalExerciseViewModel @Inject constructor(
     private val globalExerciseRepository: IGlobalExerciseRepository
 ) : ViewModel() {
 
-    private val _globalExercises = MutableStateFlow<List<Exercise>>(listOf())
+    private val _globalExercises = MutableStateFlow<List<GlobalExercise>>(listOf())
     val globalExercises = _globalExercises.asStateFlow()
 
     init {
@@ -26,6 +26,12 @@ class GlobalExerciseViewModel @Inject constructor(
             globalExerciseRepository.getAllExercises().collect {
                 _globalExercises.value = it
             }
+        }
+    }
+
+    fun upsert(globalExercise: GlobalExercise) {
+        viewModelScope.launch {
+            globalExerciseRepository.upsert(globalExercise)
         }
     }
 }

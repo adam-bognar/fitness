@@ -2,7 +2,7 @@
 package com.fitness.data.repository.routine
 
 import com.fitness.data.auth.AccountService
-import com.fitness.model.Routine
+import com.fitness.model.gym.Routine
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

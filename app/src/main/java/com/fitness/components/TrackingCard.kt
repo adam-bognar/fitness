@@ -32,7 +32,7 @@ fun TrackingCard(
     Column(
         modifier = Modifier
             .padding(start = 12.dp)
-            .fillMaxWidth(0.5f)
+            .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
             .background(Color.White)
             .padding(12.dp)

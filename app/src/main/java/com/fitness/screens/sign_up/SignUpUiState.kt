@@ -1,4 +1,4 @@
-package com.fitness.model
+package com.fitness.screens.sign_up
 
 data class SignUpUiState(
     val email: String = "",

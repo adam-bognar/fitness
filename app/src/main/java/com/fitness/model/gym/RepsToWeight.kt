@@ -1,5 +1,5 @@
 
-package com.fitness.model
+package com.fitness.model.gym
 
 data class RepsToWeight(
     val reps: Int,

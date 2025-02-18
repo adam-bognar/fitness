@@ -24,42 +24,17 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.fitness.R
 import com.fitness.data.repository.routine.RoutineViewModel
-import com.fitness.model.Routine
+import com.fitness.model.gym.Routine
+import com.fitness.screens.home.BottomBar
 import com.fitness.screens.home.TopAppBar
 
 @Composable
 fun Routines(
     onStart: (Routine) -> Unit,
     onEdit: (Int) -> Unit,
-    viewModel: RoutineViewModel = hiltViewModel()
+    viewModel: RoutineViewModel = hiltViewModel(),
+    onClick: (String) -> Unit
 ) {
-//    val routines: List<Routine> = listOf(
-//        Routine(
-//            name = "Routine 1",
-//            description = "Description 1",
-//            exercises = listOf(
-//                Exercise(name = "Bench press 1", id = 1),
-//                Exercise(name = "Push ups", id = 2),
-//                Exercise(name = "Squat", id = 3),
-//                Exercise(name = "Shoulder press", id = 2),
-//                Exercise(name = "Barbell curls", id = 3),
-//                Exercise(name = "Dumbbell rows", id = 2),
-//                Exercise(name = "Lat pull downs", id = 3),
-//            ),
-//            id = 1
-//        ),
-//        Routine(
-//            name = "Routine 1",
-//            description = "Description 1",
-//            exercises = listOf(
-//                Exercise(name = "Bench press 1", id = 1),
-//                Exercise(name = "Push ups", id = 2),
-//                Exercise(name = "Squat", id = 3),
-//                Exercise(name = "Shoulder press", id = 2),
-//            ),
-//            id = 1
-//        ),
-//    )
     var addRoutine by remember { mutableStateOf(false) }
     val routines = viewModel.list.collectAsState().value
 
@@ -67,6 +42,11 @@ fun Routines(
         topBar = {
             TopAppBar(
                 alignment = Alignment.Start
+            )
+        },
+        bottomBar = {
+            BottomBar (
+                onClick = onClick
             )
         },
     ) { innerPadding ->
@@ -138,5 +118,6 @@ fun RoutinesPreview() {
     Routines(
         onStart = {},
         onEdit = {},
+        onClick = {}
         )
 }

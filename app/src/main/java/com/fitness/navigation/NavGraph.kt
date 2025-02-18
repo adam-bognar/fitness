@@ -7,8 +7,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.fitness.model.Routine
+import com.fitness.UploadJsonScreen
+import com.fitness.model.gym.Routine
 import com.fitness.screens.home.Home
+import com.fitness.screens.macros.Macros
 import com.fitness.screens.sign_in.SignIn
 import com.fitness.screens.sign_up.SignUp
 import com.fitness.screens.splash.Splash
@@ -25,6 +27,10 @@ fun NavGraph(
         navController = navController,
         startDestination = Screen.SPLASH.route
     ) {
+        composable(Screen.UPLOAD.route) {
+            UploadJsonScreen()
+        }
+
         composable(Screen.SPLASH.route) {
             Splash(
                 openAndPopUp = { destination ->
@@ -52,6 +58,9 @@ fun NavGraph(
             Home(
                 onActivityClick = { destination ->
                     navController.navigate(destination)
+                },
+                onNavigate = { destination ->
+                    navController.navigate(destination)
                 }
             )
         }
@@ -63,6 +72,9 @@ fun NavGraph(
                 },
                 onEdit = {id ->
                     navController.navigate("${Screen.EDIT_ROUTINE.route}/$id")
+                },
+                onClick = { destination ->
+                    navController.navigate(destination)
                 }
             )
         }
@@ -90,9 +102,14 @@ fun NavGraph(
                 onNavigateBack = {
                     navController.popBackStack()
                 },
-                onNavigateToExerciseAdd = {
-                    //TODO
-                },
+            )
+        }
+
+        composable (Screen.MACROS.route) {
+            Macros(
+                onNavigateTo = { destination ->
+                    navController.navigate(destination)
+                }
             )
         }
     }
