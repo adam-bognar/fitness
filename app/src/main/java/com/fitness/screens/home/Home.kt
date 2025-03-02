@@ -10,6 +10,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -17,14 +19,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.fitness.R
 import com.fitness.components.ActivityCard
 import com.fitness.components.TrackingCard
+import com.fitness.data.steps.StepTrackingViewModel
 
 @Composable
 fun Home(
     onActivityClick: (String) -> Unit,
-    onNavigate: (String) -> Unit
+    onNavigate: (String) -> Unit,
+    stepTrackingViewModel: StepTrackingViewModel = hiltViewModel()
 ) {
     val activities = listOf(
         Triple(
@@ -35,6 +40,14 @@ fun Home(
             painterResource(id = R.drawable.sprint),
             listOf(colorResource(R.color.light_green), colorResource(R.color.green))),
     )
+    stepTrackingViewModel.resetSteps()
+
+    val steps by stepTrackingViewModel.stepCount.collectAsState()
+    stepTrackingViewModel.startTracking()
+
+
+
+
 
     Scaffold(
         topBar = { TopAppBar(
@@ -61,7 +74,7 @@ fun Home(
                             name = "Calories Burned",
                             icon = painterResource(id = R.drawable.exercise),
                             symbol = "min",
-                            data = 30
+                            data = steps
                         )
                     }
                 }

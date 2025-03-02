@@ -63,18 +63,11 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    //Compose Bill of Materials
     implementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(platform(libs.androidx.compose.bom))
-
-    //ViewModel Lifecycle
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
-
-    //Compose Navigation
     implementation(libs.androidx.navigation.compose)
-
-    //Material Icons
     implementation(libs.androidx.material.icons.extended)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
@@ -82,6 +75,7 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
     ksp(libs.hilt.compiler)
     implementation(libs.gson)
+    implementation(libs.play.services.location)
 
 
 }
