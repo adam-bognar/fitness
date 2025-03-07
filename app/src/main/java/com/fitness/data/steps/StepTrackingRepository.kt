@@ -4,33 +4,33 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
+import javax.inject.Singleton
 
-@ActivityRetainedScoped
+@Singleton
 class StepTrackingRepository @Inject constructor(
     private val sensorManager: SensorManager,
     private val stepCounterSensor: Sensor?
-) : SensorEventListener {
+) : IStepTrackingRepository, SensorEventListener {
 
-    private val _stepCount = MutableStateFlow<Int>(0)
-    val stepCount: StateFlow<Int> get() = _stepCount
+    private val _stepCount = MutableStateFlow(0)
+    override val stepCount: StateFlow<Int> get() = _stepCount
 
     private var initialStepsCount: Int? = null
 
-    fun startTracking() {
+    override fun startTracking() {
         stepCounterSensor?.let {
             sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_UI)
         }
     }
 
-    fun stopTracking() {
+    override fun stopTracking() {
         sensorManager.unregisterListener(this)
     }
 
-    fun resetSteps() {
+    override fun resetSteps() {
         initialStepsCount = null
         _stepCount.value = 0
     }

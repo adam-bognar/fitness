@@ -1,36 +1,38 @@
 package com.fitness.screens.home
 
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.fitness.R
 import com.fitness.components.ActivityCard
 import com.fitness.components.TrackingCard
-import com.fitness.data.steps.StepTrackingViewModel
+import com.fitness.data.location.LocationService
+import com.fitness.data.steps.StepService
 
 @Composable
 fun Home(
     onActivityClick: (String) -> Unit,
     onNavigate: (String) -> Unit,
-    stepTrackingViewModel: StepTrackingViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
+
     val activities = listOf(
         Triple(
             "Workout",
@@ -40,10 +42,6 @@ fun Home(
             painterResource(id = R.drawable.sprint),
             listOf(colorResource(R.color.light_green), colorResource(R.color.green))),
     )
-    stepTrackingViewModel.resetSteps()
-
-    val steps by stepTrackingViewModel.stepCount.collectAsState()
-    stepTrackingViewModel.startTracking()
 
 
 
@@ -74,7 +72,7 @@ fun Home(
                             name = "Calories Burned",
                             icon = painterResource(id = R.drawable.exercise),
                             symbol = "min",
-                            data = steps
+                            data = 10
                         )
                     }
                 }
@@ -101,6 +99,47 @@ fun Home(
                             onStart = onActivityClick
                         )
                     }
+                }
+
+                Button(
+                    onClick = {
+                        Intent(context, StepService::class.java).also {
+                            it.action = StepService.Actions.START.toString()
+                            context.startService(it)
+                        }
+                    }
+                ){
+                    Text("Start Tracking")
+                }
+                Button(
+                    onClick = {
+                        Intent(context, StepService::class.java).also {
+                            it.action = StepService.Actions.STOP.toString()
+                            context.startService(it)
+                        }
+                    }
+                ){
+                    Text("Stop Tracking")
+                }
+                Button(
+                    onClick = {
+                        Intent(context, LocationService::class.java).also {
+                            it.action = LocationService.ACTION_START
+                            context.startService(it)
+                        }
+                    }
+                ){
+                    Text("Start location tracking")
+                }
+                Button(
+                    onClick = {
+                        Intent(context, LocationService::class.java).also {
+                            it.action = LocationService.ACTION_STOP
+                            context.startService(it)
+                        }
+                    }
+                ){
+                    Text("Stop location tracking")
                 }
             }
         }
