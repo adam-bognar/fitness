@@ -11,6 +11,7 @@ import com.fitness.data.location.DefaultLocationClient
 import com.fitness.data.location.LocationClient
 import com.fitness.data.steps.IStepTrackingRepository
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -29,12 +30,17 @@ class RunningService : Service() {
     @Inject
     lateinit var stepTrackingRepository: IStepTrackingRepository
 
-    private val serviceScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+    @Inject
+    lateinit var runningRepository: IRunningRepository
+
+
+    private val serviceScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
     private lateinit var locationClient: LocationClient
     private lateinit var notificationManager: NotificationManager
 
     private var currentSteps: Int = 0
     private var currentLocation: String = "Waiting for location..."
+    private var coords: MutableList<LatLng> = mutableListOf()
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -50,12 +56,29 @@ class RunningService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.action) {
             ACTION_START -> startTracking()
-            ACTION_STOP -> stopSelf()
+            ACTION_STOP -> stopTracking()
         }
-        return START_STICKY
+        return super.onStartCommand(intent, flags, startId)
+    }
+
+    private fun stopTracking() {
+
+        val session = RunningSession(
+            id = runningRepository.highestId() + 1,
+            timestamp = 100L,
+            steps = currentSteps,
+            coords = coords
+        )
+
+        serviceScope.launch {
+            runningRepository.saveRunningSession(session)
+        }
+
+        stopSelf()
     }
 
     private fun startTracking() {
+
         startForeground(1, createNotification())
 
         // Start step tracking
@@ -72,9 +95,12 @@ class RunningService : Service() {
             .catch { e -> e.printStackTrace() }
             .onEach { location ->
                 currentLocation = "Lat: ${location.latitude}, Lon: ${location.longitude}"
+                coords.add(LatLng(location.latitude, location.longitude))
                 updateNotification()
             }
             .launchIn(serviceScope)
+
+
     }
 
     private fun createNotification(): android.app.Notification {

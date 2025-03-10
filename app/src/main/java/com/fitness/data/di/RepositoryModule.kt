@@ -12,6 +12,8 @@ import com.fitness.data.repository.routine.IRoutineRepository
 import com.fitness.data.repository.routine.RoutinesRepositoryImpl
 import com.fitness.data.repository.user_information.IUserInformationRepository
 import com.fitness.data.repository.user_information.UserInfoRepoImpl
+import com.fitness.data.running.IRunningRepository
+import com.fitness.data.running.RunningRepositoryImpl
 import com.fitness.data.steps.IStepTrackingRepository
 import com.fitness.data.steps.StepTrackingRepository
 import dagger.Binds
@@ -65,5 +67,12 @@ abstract class RepositoryModule {
     abstract fun bindStepTrackingRepository(
         stepTrackingRepositoryImpl: StepTrackingRepository
     ): IStepTrackingRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindRunningRepository(
+        runningRepositoryImpl: RunningRepositoryImpl
+    ): IRunningRepository
+
 
 }

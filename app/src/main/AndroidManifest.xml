@@ -50,6 +50,13 @@
             android:foregroundServiceType="location"
             />
 
+        <service
+            android:name=".data.running.RunningService"
+            android:enabled="true"
+            android:exported="true"
+            android:foregroundServiceType="location|health"
+            />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${GOOGLE_MAPS_API_KEY}" />

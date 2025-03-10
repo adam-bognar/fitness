@@ -23,8 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.fitness.R
 import com.fitness.components.ActivityCard
 import com.fitness.components.TrackingCard
-import com.fitness.data.location.LocationService
-import com.fitness.data.steps.StepService
+import com.fitness.data.running.RunningService
 
 @Composable
 fun Home(
@@ -103,8 +102,8 @@ fun Home(
 
                 Button(
                     onClick = {
-                        Intent(context, StepService::class.java).also {
-                            it.action = StepService.Actions.START.toString()
+                        Intent(context, RunningService::class.java).also {
+                            it.action = RunningService.ACTION_START
                             context.startService(it)
                         }
                     }
@@ -113,34 +112,34 @@ fun Home(
                 }
                 Button(
                     onClick = {
-                        Intent(context, StepService::class.java).also {
-                            it.action = StepService.Actions.STOP.toString()
+                        Intent(context, RunningService::class.java).also {
+                            it.action = RunningService.ACTION_STOP
                             context.startService(it)
                         }
                     }
                 ){
                     Text("Stop Tracking")
                 }
-                Button(
-                    onClick = {
-                        Intent(context, LocationService::class.java).also {
-                            it.action = LocationService.ACTION_START
-                            context.startService(it)
-                        }
-                    }
-                ){
-                    Text("Start location tracking")
-                }
-                Button(
-                    onClick = {
-                        Intent(context, LocationService::class.java).also {
-                            it.action = LocationService.ACTION_STOP
-                            context.startService(it)
-                        }
-                    }
-                ){
-                    Text("Stop location tracking")
-                }
+//                Button(
+//                    onClick = {
+//                        Intent(context, LocationService::class.java).also {
+//                            it.action = LocationService.ACTION_START
+//                            context.startService(it)
+//                        }
+//                    }
+//                ){
+//                    Text("Start location tracking")
+//                }
+//                Button(
+//                    onClick = {
+//                        Intent(context, LocationService::class.java).also {
+//                            it.action = LocationService.ACTION_STOP
+//                            context.startService(it)
+//                        }
+//                    }
+//                ){
+//                    Text("Stop location tracking")
+//                }
             }
         }
     )
