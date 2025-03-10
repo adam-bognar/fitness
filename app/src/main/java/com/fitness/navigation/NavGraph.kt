@@ -11,6 +11,7 @@ import com.fitness.UploadJsonScreen
 import com.fitness.model.gym.Routine
 import com.fitness.screens.home.Home
 import com.fitness.screens.macros.Macros
+import com.fitness.screens.map.MyMapScreen
 import com.fitness.screens.sign_in.SignIn
 import com.fitness.screens.sign_up.SignUp
 import com.fitness.screens.splash.Splash
@@ -37,6 +38,10 @@ fun NavGraph(
                     navController.navigate(destination)
                 }
             )
+        }
+
+        composable(Screen.MAP.route) {
+             MyMapScreen()
         }
 
         composable(Screen.SIGN_IN.route) {

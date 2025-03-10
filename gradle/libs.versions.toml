@@ -10,6 +10,7 @@ lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.10.0"
 composeBom = "2025.01.01"
 lifecycleVersion = "2.8.7"
+mapsCompose = "2.11.4"
 navigationCompose = "2.8.6"
 firebaseAuthKtx = "23.2.0"
 hilt = "2.51.1"
@@ -19,6 +20,8 @@ firebaseFirestoreKtx = "25.1.2"
 gson = "2.10.1"
 firebaseCrashlyticsBuildtools = "3.0.3"
 playServicesLocation = "21.3.0"
+playServicesMaps = "19.1.0"
+secretsGradlePlugin = "2.0.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -48,7 +51,10 @@ hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", ve
 firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-firestore-ktx", version.ref = "firebaseFirestoreKtx" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 firebase-crashlytics-buildtools = { group = "com.google.firebase", name = "firebase-crashlytics-buildtools", version.ref = "firebaseCrashlyticsBuildtools" }
+maps-compose = { module = "com.google.maps.android:maps-compose", version.ref = "mapsCompose" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
+play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMaps" }
+secrets-gradle-plugin = { module = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin", version.ref = "secretsGradlePlugin" }
 
 
 

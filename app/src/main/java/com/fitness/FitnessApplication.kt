@@ -27,7 +27,9 @@ class FitnessApplication : Application(){
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
 
-            notificationManager.createNotificationChannel(channel2)
+            val notificationManager2 = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager2.createNotificationChannel(channel2)
+
         }
 
     }

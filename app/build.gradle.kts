@@ -5,6 +5,7 @@ plugins {
     id("com.google.gms.google-services")
     alias(libs.plugins.google.dagger.hilt.android)
     alias(libs.plugins.google.devtools.ksp)
+    id ("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 
 }
 
@@ -76,6 +77,9 @@ dependencies {
     ksp(libs.hilt.compiler)
     implementation(libs.gson)
     implementation(libs.play.services.location)
+    implementation (libs.play.services.maps)
+    implementation(libs.maps.compose)
+
 
 
 }

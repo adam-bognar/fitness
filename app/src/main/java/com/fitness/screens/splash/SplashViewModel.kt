@@ -13,7 +13,7 @@ class SplashViewModel @Inject constructor(
 
   fun onAppStart(openAndPopUp: (String) -> Unit) {
     if (accountService.hasUser()){
-
+    //openAndPopUp(Screen.MAP.route)
         openAndPopUp(Screen.HOME.route)
     }
     else openAndPopUp(Screen.SIGN_IN.route)
