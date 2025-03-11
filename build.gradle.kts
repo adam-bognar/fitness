@@ -8,3 +8,9 @@ plugins {
     kotlin("kapt") version "1.9.10" apply false
     alias(libs.plugins.google.devtools.ksp) apply false
 }
+
+buildscript {
+    dependencies {
+        classpath (libs.secrets.gradle.plugin)
+    }
+}
