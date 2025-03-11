@@ -2,12 +2,14 @@ package com.fitness.data.running
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class RunningViewModel @Inject constructor(
     private val repository: IRunningRepository
 ):ViewModel()  {
@@ -16,6 +18,7 @@ class RunningViewModel @Inject constructor(
 
     init {
         getRunningSessions()
+
     }
 
     private fun getRunningSessions() {

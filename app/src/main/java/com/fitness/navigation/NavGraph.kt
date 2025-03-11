@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.fitness.UploadJsonScreen
 import com.fitness.model.gym.Routine
+import com.fitness.screens.Running.RunningScreen
 import com.fitness.screens.home.Home
 import com.fitness.screens.macros.Macros
 import com.fitness.screens.map.MyMapScreen
@@ -18,6 +19,7 @@ import com.fitness.screens.splash.Splash
 import com.fitness.screens.workout.routine.EditRoutine
 import com.fitness.screens.workout.routine.Routines
 import com.fitness.screens.workout.session.WorkoutPage
+import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 
 @Composable
@@ -40,9 +42,12 @@ fun NavGraph(
             )
         }
 
-        composable(Screen.MAP.route) {
-             MyMapScreen()
+        composable(Screen.RUNNING.route) {
+            RunningScreen()
         }
+
+
+
 
         composable(Screen.SIGN_IN.route) {
             SignIn(
@@ -94,6 +99,16 @@ fun NavGraph(
                     navController.popBackStack()
                 }
             )
+        }
+
+        composable(
+            route = "${Screen.MAP.route}/{coords}",
+            arguments = listOf(navArgument("coords") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val coordsJson = backStackEntry.arguments?.getString("coords")
+            val coords = Gson().fromJson(coordsJson, Array<LatLng>::class.java).toList()
+            MyMapScreen(
+                coords = coords)
         }
 
         composable(

@@ -11,4 +11,5 @@ sealed class Screen(val route: String) {
     object UPLOAD : Screen("UPLOAD")
     object MACROS : Screen("MACROS")
     object MAP : Screen("MAP")
+    object RUNNING : Screen("RUNNING")
 }

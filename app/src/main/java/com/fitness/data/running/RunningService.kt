@@ -5,6 +5,7 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.IBinder
+import android.os.SystemClock
 import androidx.core.app.NotificationCompat
 import com.fitness.R
 import com.fitness.data.location.DefaultLocationClient
@@ -17,6 +18,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
@@ -38,6 +40,8 @@ class RunningService : Service() {
     private lateinit var locationClient: LocationClient
     private lateinit var notificationManager: NotificationManager
 
+
+    private var elapsedTime: Int = 0
     private var currentSteps: Int = 0
     private var currentLocation: String = "Waiting for location..."
     private var coords: MutableList<LatLng> = mutableListOf()
@@ -63,11 +67,13 @@ class RunningService : Service() {
 
     private fun stopTracking() {
 
+        val mycoords = coords.map { MyLatLng(it.latitude, it.longitude) }
+
         val session = RunningSession(
             id = runningRepository.highestId() + 1,
-            timestamp = 100L,
+            timestamp = elapsedTime.toLong(),
             steps = currentSteps,
-            coords = coords
+            coords = mycoords
         )
 
         serviceScope.launch {
@@ -77,9 +83,21 @@ class RunningService : Service() {
         stopSelf()
     }
 
+    private var startTime = 0L
+
     private fun startTracking() {
 
         startForeground(1, createNotification())
+
+        startTime = SystemClock.elapsedRealtime() // Capture start time
+
+        serviceScope.launch {
+            while (true) {
+                elapsedTime = ((SystemClock.elapsedRealtime() - startTime) / 1000).toInt()
+                updateNotification()
+                delay(1000L) // Update every second
+            }
+        }
 
         // Start step tracking
         stepTrackingRepository.startTracking()
@@ -107,7 +125,7 @@ class RunningService : Service() {
         return NotificationCompat.Builder(this, "running_channel")
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle("Running Session")
-            .setContentText("Steps: $currentSteps | $currentLocation")
+            .setContentText("Time: ${formatElapsedTime(elapsedTime)} | Steps: $currentSteps")
             .setSilent(true)
             .setOngoing(true)
             .build()
@@ -116,6 +134,13 @@ class RunningService : Service() {
     private fun updateNotification() {
         val notification = createNotification()
         notificationManager.notify(1, notification)
+    }
+
+    private fun formatElapsedTime(seconds: Int): String {
+        val hours = seconds / 3600
+        val minutes = (seconds % 3600) / 60
+        val secs = seconds % 60
+        return String.format("%02d:%02d:%02d", hours, minutes, secs)
     }
 
     override fun onDestroy() {

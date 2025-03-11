@@ -1,10 +1,10 @@
 package com.fitness.screens.home
 
-import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Button
@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -20,17 +21,22 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.fitness.R
 import com.fitness.components.ActivityCard
 import com.fitness.components.TrackingCard
-import com.fitness.data.running.RunningService
+import com.fitness.data.running.RunningViewModel
+import com.fitness.navigation.Screen
+import com.google.gson.Gson
 
 @Composable
 fun Home(
     onActivityClick: (String) -> Unit,
     onNavigate: (String) -> Unit,
+    viewmodel: RunningViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
+    val runningSessions = viewmodel.runningSessions.collectAsState().value
 
     val activities = listOf(
         Triple(
@@ -100,46 +106,22 @@ fun Home(
                     }
                 }
 
-                Button(
-                    onClick = {
-                        Intent(context, RunningService::class.java).also {
-                            it.action = RunningService.ACTION_START
-                            context.startService(it)
-                        }
+                LazyColumn {
+                    items(runningSessions.size){index ->
+                        val session = runningSessions[index]
+
+                        val coords = session.coords.map { it.toLatLng() }
+
+
+                        val coordsJson = Gson().toJson(coords)
+                        Button(
+                            onClick = {
+                                onNavigate("${Screen.MAP.route}/$coordsJson")
+                            }
+                        ) { }
                     }
-                ){
-                    Text("Start Tracking")
                 }
-                Button(
-                    onClick = {
-                        Intent(context, RunningService::class.java).also {
-                            it.action = RunningService.ACTION_STOP
-                            context.startService(it)
-                        }
-                    }
-                ){
-                    Text("Stop Tracking")
-                }
-//                Button(
-//                    onClick = {
-//                        Intent(context, LocationService::class.java).also {
-//                            it.action = LocationService.ACTION_START
-//                            context.startService(it)
-//                        }
-//                    }
-//                ){
-//                    Text("Start location tracking")
-//                }
-//                Button(
-//                    onClick = {
-//                        Intent(context, LocationService::class.java).also {
-//                            it.action = LocationService.ACTION_STOP
-//                            context.startService(it)
-//                        }
-//                    }
-//                ){
-//                    Text("Stop location tracking")
-//                }
+
             }
         }
     )
