@@ -12,4 +12,5 @@ sealed class Screen(val route: String) {
     object MACROS : Screen("MACROS")
     object MAP : Screen("MAP")
     object RUNNING : Screen("RUNNING")
+    object PROFILE : Screen("PROFILE")
 }

@@ -13,6 +13,7 @@ import com.fitness.data.location.LocationClient
 import com.fitness.data.steps.IStepTrackingRepository
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
+import com.google.firebase.Timestamp
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -68,12 +69,15 @@ class RunningService : Service() {
     private fun stopTracking() {
 
         val mycoords = coords.map { MyLatLng(it.latitude, it.longitude) }
+        val distance = RunningSession().calculateTotalDistance(coords)
 
         val session = RunningSession(
             id = runningRepository.highestId() + 1,
             timestamp = elapsedTime.toLong(),
             steps = currentSteps,
-            coords = mycoords
+            coords = mycoords,
+            distance = distance,
+            date = Timestamp.now()
         )
 
         serviceScope.launch {

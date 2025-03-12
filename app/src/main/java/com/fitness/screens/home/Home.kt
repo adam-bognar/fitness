@@ -4,10 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -26,8 +24,6 @@ import com.fitness.R
 import com.fitness.components.ActivityCard
 import com.fitness.components.TrackingCard
 import com.fitness.data.running.RunningViewModel
-import com.fitness.navigation.Screen
-import com.google.gson.Gson
 
 @Composable
 fun Home(
@@ -106,21 +102,6 @@ fun Home(
                     }
                 }
 
-                LazyColumn {
-                    items(runningSessions.size){index ->
-                        val session = runningSessions[index]
-
-                        val coords = session.coords.map { it.toLatLng() }
-
-
-                        val coordsJson = Gson().toJson(coords)
-                        Button(
-                            onClick = {
-                                onNavigate("${Screen.MAP.route}/$coordsJson")
-                            }
-                        ) { }
-                    }
-                }
 
             }
         }

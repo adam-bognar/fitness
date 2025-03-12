@@ -10,6 +10,8 @@ import com.fitness.data.repository.macros.IMacrosRepository
 import com.fitness.data.repository.macros.MacrosRepositoryImpl
 import com.fitness.data.repository.routine.IRoutineRepository
 import com.fitness.data.repository.routine.RoutinesRepositoryImpl
+import com.fitness.data.repository.session.ISessionRepository
+import com.fitness.data.repository.session.SessionRepositoryImpl
 import com.fitness.data.repository.user_information.IUserInformationRepository
 import com.fitness.data.repository.user_information.UserInfoRepoImpl
 import com.fitness.data.running.IRunningRepository
@@ -73,6 +75,12 @@ abstract class RepositoryModule {
     abstract fun bindRunningRepository(
         runningRepositoryImpl: RunningRepositoryImpl
     ): IRunningRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindSessionRepository(
+        sessionRepositoryImpl: SessionRepositoryImpl
+    ): ISessionRepository
 
 
 }
