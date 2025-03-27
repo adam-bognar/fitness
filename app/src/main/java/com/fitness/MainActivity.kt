@@ -7,10 +7,19 @@ import androidx.activity.compose.setContent
 import androidx.core.app.ActivityCompat
 import com.fitness.navigation.NavGraph
 import com.fitness.ui.theme.FitnessTheme
+import com.fitness.data.MessageReceiver
+import com.google.android.gms.wearable.Wearable
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    private val messageClient by lazy { Wearable.getMessageClient(this)}
+    @Inject
+    lateinit var messageReceiver: MessageReceiver
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -34,5 +43,13 @@ class MainActivity : ComponentActivity() {
                 NavGraph()
             }
         }
+
+        messageClient.addListener(messageReceiver)
+
+    }
+
+    override fun onDestroy() {
+        messageClient.removeListener(messageReceiver)
+        super.onDestroy()
     }
 }

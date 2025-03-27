@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import android.os.SystemClock
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.fitness.R
 import com.fitness.data.location.DefaultLocationClient
@@ -13,6 +14,7 @@ import com.fitness.data.location.LocationClient
 import com.fitness.data.steps.IStepTrackingRepository
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
+import com.google.firebase.Timestamp
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -66,26 +68,42 @@ class RunningService : Service() {
     }
 
     private fun stopTracking() {
+        Log.d("RunningService", "stopTracking called")
 
         val mycoords = coords.map { MyLatLng(it.latitude, it.longitude) }
+        val distance = RunningSession().calculateTotalDistance(coords)
+
+        val id = runningRepository.highestId()
+        Log.d("RunningService", "Highest ID: $id")
+
 
         val session = RunningSession(
             id = runningRepository.highestId() + 1,
             timestamp = elapsedTime.toLong(),
             steps = currentSteps,
-            coords = mycoords
+            coords = mycoords,
+            distance = distance,
+            date = Timestamp.now()
         )
 
         serviceScope.launch {
-            runningRepository.saveRunningSession(session)
+            try {
+                runningRepository.saveRunningSession(session)
+                Log.d("RunningService", "Session saved: $session")
+            } catch (e: Exception) {
+                Log.e("RunningService", "Failed to save session", e)
+            } finally {
+                Log.d("RunningService", "Stopping service")
+                stopSelf()
+            }
         }
 
-        stopSelf()
     }
 
     private var startTime = 0L
 
     private fun startTracking() {
+        Log.d("RunningService", "startTracking called")
 
         startForeground(1, createNotification())
 

@@ -43,12 +43,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.fitness.R
 import com.fitness.data.running.RunningService
-import com.fitness.screens.home.BottomBar
 import com.fitness.screens.home.TopAppBar
 import kotlinx.coroutines.delay
 
 @Composable
-fun RunningScreen() {
+fun RunningScreen(
+    onNavigateBack: () -> Unit,
+) {
     val context = LocalContext.current
     var isRunning by remember { mutableStateOf(false) }
     var elapsedTime by remember { mutableIntStateOf(0) }
@@ -64,12 +65,7 @@ fun RunningScreen() {
         topBar = {
             TopAppBar(
                 alignment = Alignment.CenterHorizontally,
-                onBack = { /*TODO*/ },
-            )
-        },
-        bottomBar = {
-            BottomBar(
-                onClick = { /*TODO*/ }
+                onBack = { onNavigateBack },
             )
         },
         content = { innerPadding ->
@@ -163,5 +159,7 @@ fun formatElapsedTime(seconds: Int): String {
 @Preview
 @Composable
 fun RunningScreenPreview() {
-    RunningScreen()
+    RunningScreen(
+        onNavigateBack = {}
+    )
 }

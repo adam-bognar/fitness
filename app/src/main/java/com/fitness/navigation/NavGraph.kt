@@ -8,18 +8,19 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.fitness.UploadJsonScreen
+import com.fitness.data.running.RunningSession
 import com.fitness.model.gym.Routine
 import com.fitness.screens.Running.RunningScreen
 import com.fitness.screens.home.Home
 import com.fitness.screens.macros.Macros
 import com.fitness.screens.map.MyMapScreen
+import com.fitness.screens.profile.ProfileScreen
 import com.fitness.screens.sign_in.SignIn
 import com.fitness.screens.sign_up.SignUp
 import com.fitness.screens.splash.Splash
 import com.fitness.screens.workout.routine.EditRoutine
 import com.fitness.screens.workout.routine.Routines
 import com.fitness.screens.workout.session.WorkoutPage
-import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 
 @Composable
@@ -43,7 +44,10 @@ fun NavGraph(
         }
 
         composable(Screen.RUNNING.route) {
-            RunningScreen()
+            RunningScreen(onNavigateBack = {
+                navController.popBackStack()
+            }
+            )
         }
 
 
@@ -80,7 +84,7 @@ fun NavGraph(
                     val routineJson = Gson().toJson(routine)
                     navController.navigate("${Screen.WORKOUT_SESSION.route}/$routineJson")
                 },
-                onEdit = {id ->
+                onEdit = { id ->
                     navController.navigate("${Screen.EDIT_ROUTINE.route}/$id")
                 },
                 onClick = { destination ->
@@ -89,7 +93,7 @@ fun NavGraph(
             )
         }
         composable(
-            route =  "${Screen.EDIT_ROUTINE.route}/{routineID}",
+            route = "${Screen.EDIT_ROUTINE.route}/{routineID}",
             arguments = listOf(navArgument("routineID") { type = NavType.IntType })
         ) { backStackEntry ->
             val routineID = backStackEntry.arguments?.getInt("routineID") ?: 0
@@ -102,18 +106,22 @@ fun NavGraph(
         }
 
         composable(
-            route = "${Screen.MAP.route}/{coords}",
-            arguments = listOf(navArgument("coords") { type = NavType.StringType })
+            route = "${Screen.MAP.route}/{session}",
+            arguments = listOf(navArgument("session") { type = NavType.StringType })
         ) { backStackEntry ->
-            val coordsJson = backStackEntry.arguments?.getString("coords")
-            val coords = Gson().fromJson(coordsJson, Array<LatLng>::class.java).toList()
+            val sessionJson = backStackEntry.arguments?.getString("session")
+            val session = Gson().fromJson(sessionJson, RunningSession::class.java)
             MyMapScreen(
-                coords = coords)
+                session = session,
+                onNavigateBack = {
+                    navController.popBackStack()
+                }
+            )
         }
 
         composable(
-           route =  "${Screen.WORKOUT_SESSION.route}/{routine}",
-              arguments = listOf(navArgument("routine") { type = NavType.StringType })
+            route = "${Screen.WORKOUT_SESSION.route}/{routine}",
+            arguments = listOf(navArgument("routine") { type = NavType.StringType })
         ) { backStackEntry ->
             val routineJson = backStackEntry.arguments?.getString("routine")
             val routine = Gson().fromJson(routineJson, Routine::class.java)
@@ -125,9 +133,17 @@ fun NavGraph(
             )
         }
 
-        composable (Screen.MACROS.route) {
+        composable(Screen.MACROS.route) {
             Macros(
                 onNavigateTo = { destination ->
+                    navController.navigate(destination)
+                }
+            )
+        }
+
+        composable(Screen.PROFILE.route) {
+            ProfileScreen(
+                onNavigate = { destination ->
                     navController.navigate(destination)
                 }
             )

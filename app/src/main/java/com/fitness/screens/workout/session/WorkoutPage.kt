@@ -42,10 +42,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.fitness.R
 import com.fitness.data.repository.exercise.UserExerciseViewModel
 import com.fitness.data.repository.routine.RoutineViewModel
+import com.fitness.data.repository.session.SessionViewModel
 import com.fitness.model.gym.Exercise
 import com.fitness.model.gym.Routine
+import com.fitness.model.gym.Session
 import com.fitness.screens.home.TopAppBar
 import com.fitness.screens.workout.exercise.SelectExercisePopUp
+import com.google.firebase.Timestamp
 
 @Composable
 fun WorkoutPage(
@@ -53,7 +56,7 @@ fun WorkoutPage(
     onNavigateBack: () -> Unit,
     routineViewModel: RoutineViewModel = hiltViewModel(),
     exerciseViewModel: UserExerciseViewModel = hiltViewModel(),
-    //sessionViewModel: SessionViewModel = viewModel(factory = SessionViewModel.Factory),
+    sessionViewModel: SessionViewModel = hiltViewModel(),
 ) {
     var exercises by remember { mutableStateOf(routineViewModel.getRoutine(routine.id).exercises) }
     Log.d("WorkoutPage", "exercises: $exercises")
@@ -116,6 +119,7 @@ fun WorkoutPage(
                             onClick = {
                                 routineViewModel.upsert(routine.copy(exercises = exercises))
                                 exercisesToFireBase(exercises, exerciseViewModel)
+                                sessionToFirebase(routine.name, exercises, sessionViewModel)
                                 onNavigateBack()
                             },
                             shape = RoundedCornerShape(10.dp),
@@ -217,17 +221,17 @@ fun WorkoutPage(
 
 }
 
-//fun sessionToFirebase(name: String, exercises: List<Exercise>, sessionViewModel: SessionViewModel) {
-//    val session = Session(
-//        id = sessionViewModel.highestId() + 1,
-//        name = name,
-//        date = Timestamp.now(),
-//        duration = 0,
-//        log = exercises
-//    )
-//    Log.d("sessionToFirebase", "Session: $session")
-//    sessionViewModel.upsert(session)
-//}
+fun sessionToFirebase(name: String, exercises: List<Exercise>, sessionViewModel: SessionViewModel) {
+    val session = Session(
+        id = sessionViewModel.highestId() + 1,
+        name = name,
+        date = Timestamp.now(),
+        duration = 0,
+        log = exercises
+    )
+    Log.d("sessionToFirebase", "Session: $session")
+    sessionViewModel.upsert(session)
+}
 
 fun exercisesToFireBase(exercises: List<Exercise>, exerciseViewModel: UserExerciseViewModel) {
     for (exercise in exercises) {
