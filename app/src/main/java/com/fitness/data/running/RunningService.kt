@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import android.os.SystemClock
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.fitness.R
 import com.fitness.data.location.DefaultLocationClient
@@ -67,9 +68,14 @@ class RunningService : Service() {
     }
 
     private fun stopTracking() {
+        Log.d("RunningService", "stopTracking called")
 
         val mycoords = coords.map { MyLatLng(it.latitude, it.longitude) }
         val distance = RunningSession().calculateTotalDistance(coords)
+
+        val id = runningRepository.highestId()
+        Log.d("RunningService", "Highest ID: $id")
+
 
         val session = RunningSession(
             id = runningRepository.highestId() + 1,
@@ -81,15 +87,23 @@ class RunningService : Service() {
         )
 
         serviceScope.launch {
-            runningRepository.saveRunningSession(session)
+            try {
+                runningRepository.saveRunningSession(session)
+                Log.d("RunningService", "Session saved: $session")
+            } catch (e: Exception) {
+                Log.e("RunningService", "Failed to save session", e)
+            } finally {
+                Log.d("RunningService", "Stopping service")
+                stopSelf()
+            }
         }
 
-        stopSelf()
     }
 
     private var startTime = 0L
 
     private fun startTracking() {
+        Log.d("RunningService", "startTracking called")
 
         startForeground(1, createNotification())
 
