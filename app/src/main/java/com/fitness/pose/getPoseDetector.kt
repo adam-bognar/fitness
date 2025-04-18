@@ -70,3 +70,76 @@ fun isDoingPullUp(pose: Pose): Boolean {
         leftWrist.y < leftShoulder.y // wrist above shoulder = pull-up
     } else false
 }
+
+fun isDoingBenchPress(pose: Pose): Boolean {
+    val shoulder = pose.getPoseLandmark(PoseLandmark.RIGHT_SHOULDER)?.position
+    val elbow = pose.getPoseLandmark(PoseLandmark.RIGHT_ELBOW)?.position
+    val wrist = pose.getPoseLandmark(PoseLandmark.RIGHT_WRIST)?.position
+
+    return if (shoulder != null && elbow != null && wrist != null) {
+        val angle = getAngle(shoulder, elbow, wrist)
+        angle < 90 // arm is bent during press phase
+    } else false
+}
+
+
+fun isDoingBicepsCurl(pose: Pose): Boolean {
+    val shoulder = pose.getPoseLandmark(PoseLandmark.RIGHT_SHOULDER)?.position
+    val elbow = pose.getPoseLandmark(PoseLandmark.RIGHT_ELBOW)?.position
+    val wrist = pose.getPoseLandmark(PoseLandmark.RIGHT_WRIST)?.position
+
+    return if (shoulder != null && elbow != null && wrist != null) {
+        val angle = getAngle(shoulder, elbow, wrist)
+        angle < 50 // arm curled
+    } else false
+}
+
+fun isDoingLatPulldown(pose: Pose): Boolean {
+    val wrist = pose.getPoseLandmark(PoseLandmark.RIGHT_WRIST)?.position
+    val shoulder = pose.getPoseLandmark(PoseLandmark.RIGHT_SHOULDER)?.position
+
+    return if (wrist != null && shoulder != null) {
+        wrist.y >= shoulder.y // wrist pulled down
+    } else false
+}
+
+fun isDoingTricepsPushdown(pose: Pose): Boolean {
+    val shoulder = pose.getPoseLandmark(PoseLandmark.RIGHT_SHOULDER)?.position
+    val elbow = pose.getPoseLandmark(PoseLandmark.RIGHT_ELBOW)?.position
+    val wrist = pose.getPoseLandmark(PoseLandmark.RIGHT_WRIST)?.position
+
+    return if (shoulder != null && elbow != null && wrist != null) {
+        val angle = getAngle(shoulder, elbow, wrist)
+        angle > 150 // full extension
+    } else false
+}
+
+fun isDoingShoulderPress(pose: Pose): Boolean {
+    val wrist = pose.getPoseLandmark(PoseLandmark.RIGHT_WRIST)?.position
+    val shoulder = pose.getPoseLandmark(PoseLandmark.RIGHT_SHOULDER)?.position
+
+    return if (wrist != null && shoulder != null) {
+        wrist.y < shoulder.y // wrist above shoulder = pressing
+    } else false
+}
+
+fun isDoingLateralRaise(pose: Pose): Boolean {
+    val wrist = pose.getPoseLandmark(PoseLandmark.RIGHT_WRIST)?.position
+    val shoulder = pose.getPoseLandmark(PoseLandmark.RIGHT_SHOULDER)?.position
+
+    return if (wrist != null && shoulder != null) {
+        abs(wrist.y - shoulder.y) < 100 // wrist roughly at shoulder height
+    } else false
+}
+
+fun isDoingLegExtension(pose: Pose): Boolean {
+    val hip = pose.getPoseLandmark(PoseLandmark.RIGHT_HIP)?.position
+    val knee = pose.getPoseLandmark(PoseLandmark.RIGHT_KNEE)?.position
+    val ankle = pose.getPoseLandmark(PoseLandmark.RIGHT_ANKLE)?.position
+
+    return if (hip != null && knee != null && ankle != null) {
+        val angle = getAngle(hip, knee, ankle)
+        angle > 160 // leg extended
+    } else false
+}
+

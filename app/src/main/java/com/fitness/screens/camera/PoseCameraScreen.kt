@@ -33,8 +33,14 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import com.fitness.pose.ExerciseType
 import com.fitness.pose.getPoseDetector
+import com.fitness.pose.isDoingBenchPress
+import com.fitness.pose.isDoingBicepsCurl
+import com.fitness.pose.isDoingLatPulldown
+import com.fitness.pose.isDoingLateralRaise
+import com.fitness.pose.isDoingLegExtension
 import com.fitness.pose.isDoingPullUp
 import com.fitness.pose.isDoingPushUp
+import com.fitness.pose.isDoingShoulderPress
 import com.fitness.pose.isJumpingJackOpen
 import com.fitness.pose.isSquatting
 import com.google.mlkit.vision.common.InputImage
@@ -94,6 +100,13 @@ fun PoseCameraScreen() {
                                                 ExerciseType.PUSHUP -> isDoingPushUp(pose)
                                                 ExerciseType.JUMPING_JACK -> isJumpingJackOpen(pose)
                                                 ExerciseType.PULLUP -> isDoingPullUp(pose)
+                                                ExerciseType.BENCH_PRESS -> isDoingBenchPress(pose)
+                                                ExerciseType.BICEPS_CURL -> isDoingBicepsCurl(pose)
+                                                ExerciseType.LAT_PULLDOWN -> isDoingLatPulldown(pose)
+                                                ExerciseType.TRICEPS_PUSHDOWN -> isDoingBicepsCurl(pose)
+                                                ExerciseType.SHOULDER_PRESS -> isDoingShoulderPress(pose)
+                                                ExerciseType.LATERAL_RAISE -> isDoingLateralRaise(pose)
+                                                ExerciseType.LEG_EXTENSION -> isDoingLegExtension(pose)
                                             }
 
                                             if (inPosition && !wasInPosition) {
