@@ -11,6 +11,7 @@ import com.fitness.UploadJsonScreen
 import com.fitness.data.running.RunningSession
 import com.fitness.model.gym.Routine
 import com.fitness.screens.Running.RunningScreen
+import com.fitness.screens.camera.PoseCameraScreen
 import com.fitness.screens.home.Home
 import com.fitness.screens.macros.Macros
 import com.fitness.screens.map.MyMapScreen
@@ -77,6 +78,9 @@ fun NavGraph(
                     navController.navigate(destination)
                 }
             )
+        }
+        composable(Screen.CAMERA.route) {
+            PoseCameraScreen()
         }
         composable(Screen.WORKOUT.route) {
             Routines(

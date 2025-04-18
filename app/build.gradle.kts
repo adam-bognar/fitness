@@ -80,6 +80,12 @@ dependencies {
     implementation (libs.play.services.maps)
     implementation(libs.maps.compose)
     implementation(libs.play.services.wearable)
+    implementation (libs.pose.detection)
+
+    implementation(libs.androidx.camera.core)
+    implementation(libs.androidx.camera.camera2)
+    implementation(libs.androidx.camera.lifecycle)
+    implementation(libs.androidx.camera.view)
 
 
 }
