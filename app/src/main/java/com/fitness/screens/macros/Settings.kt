@@ -21,7 +21,6 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -139,7 +138,7 @@ fun Settings(
                 ExposedDropdownMenuBox(
                     expanded = genderExpanded,
                     onExpandedChange = { genderExpanded = it },
-
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     OutlinedTextField(
                         value = gender.toString(),
@@ -149,15 +148,15 @@ fun Settings(
                         trailingIcon = {
                             ExposedDropdownMenuDefaults.TrailingIcon(expanded = genderExpanded)
                         },
-                        modifier = Modifier.menuAnchor(
-                            type= MenuAnchorType.PrimaryEditable, enabled = genderExpanded
-                        )
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .menuAnchor()
                     )
 
                     ExposedDropdownMenu(
                         expanded = genderExpanded,
                         onDismissRequest = { genderExpanded = false },
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.exposedDropdownSize()
                     ) {
                         Gender.entries.forEach {
                             DropdownMenuItem(
@@ -176,8 +175,8 @@ fun Settings(
                 ExposedDropdownMenuBox(
                     expanded = activityLevelExpanded,
                     onExpandedChange = { activityLevelExpanded = it },
-
-                    ) {
+                    modifier = Modifier.fillMaxWidth()
+                ) {
                     OutlinedTextField(
                         value = activityLevel.toString(),
                         onValueChange = {},
@@ -186,15 +185,15 @@ fun Settings(
                         trailingIcon = {
                             ExposedDropdownMenuDefaults.TrailingIcon(expanded = activityLevelExpanded)
                         },
-                        modifier = Modifier.menuAnchor(
-                            type= MenuAnchorType.PrimaryEditable, enabled = activityLevelExpanded
-                        )
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .menuAnchor()
                     )
 
                     ExposedDropdownMenu(
                         expanded = activityLevelExpanded,
                         onDismissRequest = { activityLevelExpanded = false },
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.exposedDropdownSize()
                     ) {
                         ActivityLevel.entries.forEach {
                             DropdownMenuItem(
@@ -213,8 +212,8 @@ fun Settings(
                 ExposedDropdownMenuBox(
                     expanded = goalExpanded,
                     onExpandedChange = { goalExpanded = it },
-
-                    ) {
+                    modifier = Modifier.fillMaxWidth()
+                ) {
                     OutlinedTextField(
                         value = goal.toString(),
                         onValueChange = {},
@@ -223,15 +222,15 @@ fun Settings(
                         trailingIcon = {
                             ExposedDropdownMenuDefaults.TrailingIcon(expanded = goalExpanded)
                         },
-                        modifier = Modifier.menuAnchor(
-                            type= MenuAnchorType.PrimaryEditable, enabled = goalExpanded
-                        )
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .menuAnchor()
                     )
 
                     ExposedDropdownMenu(
                         expanded = goalExpanded,
                         onDismissRequest = { goalExpanded = false },
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.exposedDropdownSize()
                     ) {
                         Goal.entries.forEach {
                             DropdownMenuItem(
@@ -276,6 +275,7 @@ fun Settings(
         }
     }
 }
+
 
 @Preview
 @Composable

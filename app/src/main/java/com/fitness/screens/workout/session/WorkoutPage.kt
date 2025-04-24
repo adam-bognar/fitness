@@ -23,7 +23,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -39,6 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.fitness.R
 import com.fitness.data.repository.exercise.UserExerciseViewModel
 import com.fitness.data.repository.routine.RoutineViewModel
@@ -50,6 +54,7 @@ import com.fitness.screens.home.TopAppBar
 import com.fitness.screens.workout.exercise.SelectExercisePopUp
 import com.google.firebase.Timestamp
 
+
 @Composable
 fun WorkoutPage(
     routine: Routine,
@@ -57,7 +62,10 @@ fun WorkoutPage(
     routineViewModel: RoutineViewModel = hiltViewModel(),
     exerciseViewModel: UserExerciseViewModel = hiltViewModel(),
     sessionViewModel: SessionViewModel = hiltViewModel(),
-) {
+    onNavigateCamera: (Pair<String, Int>) -> Unit,
+    navController: NavHostController,
+
+    ) {
     var exercises by remember { mutableStateOf(routineViewModel.getRoutine(routine.id).exercises) }
     Log.d("WorkoutPage", "exercises: $exercises")
     val showTimer = remember { mutableStateOf(false) }
@@ -65,6 +73,25 @@ fun WorkoutPage(
     var isSwitched by remember { mutableStateOf(true) }
     var timerTime by remember { mutableIntStateOf(120) }
     var addExercise by remember { mutableStateOf(false) }
+
+    val repsResultLiveData = navController
+        .currentBackStackEntry
+        ?.savedStateHandle
+        ?.getLiveData<RepsResult>("repsResult")
+
+    val repsResult = repsResultLiveData?.observeAsState()?.value
+
+
+  LaunchedEffect(repsResult) {
+      repsResultLiveData?.value?.let {
+          navController.currentBackStackEntry
+              ?.savedStateHandle
+              ?.remove<RepsResult>("repsResult")
+      }
+
+   }
+
+
 
 
     Box(
@@ -133,6 +160,7 @@ fun WorkoutPage(
                     }
                 }
 
+
                 LazyColumn(
                     modifier = Modifier.weight(1f)
                 ) {
@@ -144,8 +172,13 @@ fun WorkoutPage(
                                     set(index, updatedExercise)
                                 }
                             },
-                            onDoneClick = { showTimer.value = true }
+                            onDoneClick = { showTimer.value = true },
+                            onNavigate = { pair ->
+                                onNavigateCamera(pair)
+                            },
+                            cameraResult = (if(repsResult?.exerciseName == exercises[index].name) repsResult else null)
                         )
+
                     }
 
                     item {
@@ -256,5 +289,7 @@ fun WorkoutPagePreview() {
     WorkoutPage(
         routine = sampleRoutine,
         onNavigateBack = {},
+        onNavigateCamera = {},
+        navController = NavHostController(LocalContext.current)
     )
 }

@@ -10,27 +10,29 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.navigation.NavHostController
 import com.fitness.pose.ExerciseType
 import com.fitness.pose.getPoseDetector
 import com.fitness.pose.isDoingBenchPress
@@ -43,13 +45,18 @@ import com.fitness.pose.isDoingPushUp
 import com.fitness.pose.isDoingShoulderPress
 import com.fitness.pose.isJumpingJackOpen
 import com.fitness.pose.isSquatting
+import com.fitness.screens.workout.session.RepsResult
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.pose.PoseLandmark
 import java.util.concurrent.Executors
 
 @OptIn(ExperimentalGetImage::class)
 @Composable
-fun PoseCameraScreen() {
+fun PoseCameraScreen(
+    exercise: String,
+    set: Int,
+    navController: NavHostController
+) {
     val context = LocalContext.current
     val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
     val previewView = remember { PreviewView(context) }
@@ -60,8 +67,13 @@ fun PoseCameraScreen() {
     var imageHeight by remember { mutableStateOf(1f) }
     var landmarks by remember { mutableStateOf<List<PoseLandmark>>(emptyList()) }
 
-    var selectedExercise by remember { mutableStateOf(ExerciseType.SQUAT) }
-    var repCount by remember { mutableStateOf(0) }
+
+    val initialExerciseType = remember(exercise) {
+        ExerciseType.entries.find { it.label.equals(exercise, ignoreCase = true) } ?: ExerciseType.SQUAT
+    }
+
+    var selectedExercise by remember { mutableStateOf(initialExerciseType) }
+    var repCount by remember { mutableIntStateOf(0) }
     var wasInPosition by remember { mutableStateOf(false) }
 
     val view = LocalView.current
@@ -134,7 +146,6 @@ fun PoseCameraScreen() {
             }, ContextCompat.getMainExecutor(context))
         }
 
-        // Exercise Switcher Buttons (top row)
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -142,31 +153,38 @@ fun PoseCameraScreen() {
                 .align(Alignment.TopCenter),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            ExerciseType.values().forEach { type ->
-                Button(
-                    onClick = {
-                        selectedExercise = type
-                        repCount = 0
-                        wasInPosition = false
-                    },
-                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp)
-                ) {
-                    Text(type.label, fontSize = 12.sp)
-                }
-            }
+            Text(
+                text = "Reps: $repCount",
+                fontSize = 32.sp,
+                color = Color.White
+            )
+            Text(
+                text = "Set: $set",
+                fontSize = 32.sp,
+                color = Color.White
+            )
         }
 
-        // Reps display (bottom center)
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(24.dp),
             contentAlignment = Alignment.BottomCenter
         ) {
-            Text(
-                text = "Reps: $repCount",
-                fontSize = 32.sp
-            )
+            TextButton(
+                onClick = {
+                    navController.previousBackStackEntry
+                        ?.savedStateHandle
+                        ?.set("repsResult", RepsResult(exercise, set, repCount))
+
+                    navController.popBackStack()
+                },
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(24.dp)
+            ) {
+                Text("Done")
+            }
         }
     }
 }

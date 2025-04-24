@@ -1,5 +1,5 @@
 [versions]
-agp = "8.9.1"
+agp = "8.9.2"
 cameraCore = "1.4.2"
 firebaseBom = "33.9.0"
 kotlin = "2.0.0"
@@ -23,6 +23,7 @@ firebaseCrashlyticsBuildtools = "3.0.3"
 playServicesLocation = "21.3.0"
 playServicesMaps = "19.1.0"
 poseDetection = "18.0.0-beta5"
+runtimeLivedata = "1.7.8"
 secretsGradlePlugin = "2.0.1"
 playServicesWearable = "19.0.0"
 composeMaterial = "1.2.1"
@@ -36,6 +37,7 @@ androidx-camera-core = { module = "androidx.camera:camera-core", version.ref = "
 androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "cameraCore" }
 androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "cameraCore" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata", version.ref = "runtimeLivedata" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CalendarToday
+import androidx.compose.material.icons.filled.LocalFireDepartment
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -45,6 +47,19 @@ fun Home(
             listOf(colorResource(R.color.light_green), colorResource(R.color.green))),
     )
 
+    val streaks = listOf(
+        Triple(
+            "Daily Streak",
+            Icons.Default.LocalFireDepartment,
+            colorResource(R.color.orange)
+        ),
+        Triple(
+            "Weekly Streak",
+            Icons.Default.CalendarToday,
+            colorResource(R.color.blue)
+        )
+    )
+
 
 
 
@@ -71,10 +86,12 @@ fun Home(
                 ) {
                     items(2){index ->
                         TrackingCard(   // TrackingCard is a custom composable
-                            name = "Calories Burned",
-                            icon = painterResource(id = R.drawable.exercise),
-                            symbol = "min",
-                            data = 10
+                            name = streaks[index].first.toString(),
+                            icon = streaks[index].second,
+                            symbol = if (streaks[index].first == "Daily Streak") "days" else "weeks",
+                            data = 5,
+                            milestone = 10,
+                            color = streaks[index].third,
                         )
                     }
                 }
@@ -103,13 +120,13 @@ fun Home(
                     }
                 }
 
-                Button(
-                    onClick = { onNavigate("CAMERA") },
-                    modifier = Modifier
-                        .padding(16.dp)
-                ) {
-                    Text("open camera")
-                }
+//                Button(
+//                    onClick = { onNavigate("CAMERA") },
+//                    modifier = Modifier
+//                        .padding(16.dp)
+//                ) {
+//                    Text("open camera")
+//                }
 
 
             }
