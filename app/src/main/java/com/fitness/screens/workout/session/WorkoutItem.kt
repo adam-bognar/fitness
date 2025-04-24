@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -35,22 +36,22 @@ import com.fitness.R
 import com.fitness.model.gym.Exercise
 import com.fitness.model.gym.ExerciseLog
 import com.fitness.model.gym.RepsToWeight
-
+import com.fitness.pose.ExerciseType
 @Composable
 fun WorkoutItem(
     exercise: Exercise,
     onUpdate: (Exercise) -> Unit = {},
-    onDoneClick: () -> Unit = {}
+    onDoneClick: () -> Unit = {},
+    onNavigate: (Pair<String, Int>) -> Unit = {},
+    cameraResult: RepsResult? = null
 ) {
-
-    var logs by remember { mutableStateOf(exercise.lastLog?.sets ?: listOf()) }
-    val newLogs by remember { mutableStateOf(mutableListOf<RepsToWeight>()) }
-
-    if (logs.isEmpty()) {
-        logs = List(3) { RepsToWeight() }
-    } else if (logs.size < 3) {
-        logs = logs + List(3 - logs.size) { RepsToWeight() }
+    var logs by remember(exercise) {
+        mutableStateOf(
+            exercise.lastLog?.sets?.toMutableList() ?: MutableList(3) { RepsToWeight() }
+        )
     }
+
+    val poseDetectionSupported = isPoseDetectionSupported(exercise.name)
 
     Column(
         modifier = Modifier
@@ -77,45 +78,57 @@ fun WorkoutItem(
                 .fillMaxWidth()
                 .padding(bottom = 18.dp)
         ) {
-            Text(text = "SET", modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
-            Text(text = "PREVIOUS", modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
-            Text(text = "KG", modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
-            Text(text = "REPS", modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
-            Text(text = "DONE", modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
+            if (poseDetectionSupported) {
+                Spacer(modifier = Modifier.weight(0.5f))
+            }
+            Text("SET", Modifier.weight(1f), color = Color.Black, textAlign = TextAlign.Center)
+            Text("PREVIOUS", Modifier.weight(1f), textAlign = TextAlign.Center)
+            Text("KG", Modifier.weight(1f), textAlign = TextAlign.Center)
+            Text("REPS", Modifier.weight(1f), textAlign = TextAlign.Center)
+            Text("DONE", Modifier.weight(1f), textAlign = TextAlign.Center)
         }
 
         logs.forEachIndexed { index, log ->
+            val setNumber = index + 1
             DataRow(
-                setNumber = index + 1,
+                setNumber = setNumber,
                 previous = log,
                 onTick = { kg, reps, isChecked ->
                     if (isChecked) {
-                        val kgValue = if (kg.isEmpty()) log.weight else kg.toInt()
-                        val repsValue = if (reps.isEmpty()) log.reps else reps.toInt()
-                        newLogs.add(RepsToWeight(reps = repsValue, weight = kgValue))
+                        val kgValue = kg.toIntOrNull() ?: log.weight
+                        val repsValue = reps.toIntOrNull() ?: log.reps
+
+                        logs[index] = RepsToWeight(reps = repsValue, weight = kgValue)
+                        Log.d("WorkoutItem", "Updated set $index: ${logs[index]}")
+
+                        // Send update up
+                        onUpdate(exercise.copy(lastLog = ExerciseLog(id = 0, sets = logs)))
                         onDoneClick()
-                    } else {
-                        newLogs.removeIf { it.reps == log.reps && it.weight == log.weight }
                     }
-                    val updatedExercise = exercise.copy(lastLog = ExerciseLog(id = 0,sets = newLogs.toList()))
-                    Log.d("WorkoutItem", "Updated exercise: $updatedExercise")
-                    onUpdate(updatedExercise)
                 },
+                supported = poseDetectionSupported,
+                onCameraClick = { onNavigate(Pair(exercise.name, setNumber)) },
+                cameraResult = cameraResult?.takeIf { it.setNumber == setNumber }
             )
         }
 
         TextButton(
             onClick = {
-                logs = logs + List(1) { RepsToWeight() }
+                logs.add(RepsToWeight())
+                onUpdate(exercise.copy(lastLog = ExerciseLog(id = 0, sets = logs)))
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(text = "Add Set",
-                color = colorResource(id = R.color.light_blue))
+            Text("Add Set", color = colorResource(id = R.color.light_blue))
         }
     }
 }
 
+
+
+fun isPoseDetectionSupported(exerciseName: String): Boolean {
+    return ExerciseType.entries.any { it.label.equals(exerciseName, ignoreCase = true) }
+}
 
 
 @Composable

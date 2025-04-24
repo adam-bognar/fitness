@@ -11,6 +11,7 @@ import com.fitness.UploadJsonScreen
 import com.fitness.data.running.RunningSession
 import com.fitness.model.gym.Routine
 import com.fitness.screens.Running.RunningScreen
+import com.fitness.screens.camera.PoseCameraScreen
 import com.fitness.screens.home.Home
 import com.fitness.screens.macros.Macros
 import com.fitness.screens.map.MyMapScreen
@@ -78,6 +79,7 @@ fun NavGraph(
                 }
             )
         }
+
         composable(Screen.WORKOUT.route) {
             Routines(
                 onStart = { routine ->
@@ -130,6 +132,29 @@ fun NavGraph(
                 onNavigateBack = {
                     navController.popBackStack()
                 },
+                onNavigateCamera = { exerciseAndSet ->
+                    val exerciseAndSetJson = Gson().toJson(exerciseAndSet)
+                    navController.navigate("${Screen.CAMERA.route}/$exerciseAndSetJson")
+                },
+                navController = navController,
+            )
+        }
+
+        composable(
+            route = "${Screen.CAMERA.route}/{exerciseAndSet}",
+            arguments = listOf(navArgument("exerciseAndSet") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val exerciseAndSetJson = backStackEntry.arguments?.getString("exerciseAndSet")
+            val typeToken = object : com.google.gson.reflect.TypeToken<Pair<String, Int>>() {}.type
+            val exerciseAndSet: Pair<String, Int>? = Gson().fromJson(exerciseAndSetJson, typeToken)
+
+            val exercise = exerciseAndSet?.first ?: "Unknown"
+            val set = exerciseAndSet?.second ?: 0
+
+            PoseCameraScreen(
+                exercise = exercise,
+                set = set,
+                navController = navController
             )
         }
 
