@@ -6,7 +6,7 @@
 5. Steps tracking. 03.16
 6. GPS tracking. 03.27
 7. Wearable Device Integration – Sync with smartwatches. 04.10
-8. Reps & Form Detection – Use phone sensors to count reps and analyze posture. 04.24
+8. Reps & Form Detection – Use phone sensors to count reps. 04.24
 9. Voice Assistant Commands – Control workouts via voice. 05.08
 
 - User authentication using firebase custom auth ✅
@@ -15,4 +15,4 @@
 - Steps tracking ✅
 - GPS tracking ✅
 - Start run from watch ✅
-- Next: AI?
+- MLkit pose detection ✅
