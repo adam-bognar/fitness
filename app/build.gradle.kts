@@ -88,6 +88,9 @@ dependencies {
     implementation(libs.androidx.camera.view)
     implementation(libs.androidx.runtime.livedata)
 
+    implementation ("com.patrykandpatrick.vico:compose-m3:1.14.0")
+    implementation ("com.patrykandpatrick.vico:core:1.14.0")
+
 
 
 }

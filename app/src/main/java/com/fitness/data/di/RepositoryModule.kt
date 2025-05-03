@@ -18,6 +18,8 @@ import com.fitness.data.running.IRunningRepository
 import com.fitness.data.running.RunningRepositoryImpl
 import com.fitness.data.steps.IStepTrackingRepository
 import com.fitness.data.steps.StepTrackingRepository
+import com.fitness.data.streak.IStreakRepository
+import com.fitness.data.streak.StreakRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -27,6 +29,12 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
+
+    @Binds
+    @Singleton
+    abstract fun bindStreakRepository(
+        streakRepositoryImpl: StreakRepositoryImpl
+    ): IStreakRepository
 
     @Binds
     @Singleton

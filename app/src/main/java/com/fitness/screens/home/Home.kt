@@ -14,9 +14,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -26,16 +26,18 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.fitness.R
 import com.fitness.components.ActivityCard
 import com.fitness.components.TrackingCard
-import com.fitness.data.running.RunningViewModel
+import com.fitness.data.streak.StreakInfo
+import com.fitness.data.streak.StreakViewModel
 
 @Composable
 fun Home(
     onActivityClick: (String) -> Unit,
     onNavigate: (String) -> Unit,
-    viewmodel: RunningViewModel = hiltViewModel(),
+    streakViewModel: StreakViewModel = hiltViewModel()
 ) {
-    val context = LocalContext.current
-    val runningSessions = viewmodel.runningSessions.collectAsState().value
+
+    val dailyStreakData by streakViewModel.dailyStreak.collectAsState()
+    val weeklyStreakData by streakViewModel.weeklyStreak.collectAsState()
 
     val activities = listOf(
         Triple(
@@ -48,15 +50,19 @@ fun Home(
     )
 
     val streaks = listOf(
-        Triple(
-            "Daily Streak",
-            Icons.Default.LocalFireDepartment,
-            colorResource(R.color.orange)
+        StreakInfo(
+            name = "Daily Streak",
+            icon = Icons.Default.LocalFireDepartment,
+            color = colorResource(R.color.orange),
+            currentStreak = dailyStreakData.currentStreak,
+            milestone = listOf(7, 30, 100, 365)
         ),
-        Triple(
-            "Weekly Streak",
-            Icons.Default.CalendarToday,
-            colorResource(R.color.blue)
+        StreakInfo(
+            name = "Weekly Streak",
+            icon = Icons.Default.CalendarToday,
+            color = colorResource(R.color.blue),
+            currentStreak = weeklyStreakData.currentStreak,
+            milestone = listOf(4, 12, 26, 52)
         )
     )
 
@@ -84,14 +90,18 @@ fun Home(
                     modifier = Modifier.padding(top = 16.dp).padding(end = 12.dp)
 
                 ) {
-                    items(2){index ->
-                        TrackingCard(   // TrackingCard is a custom composable
-                            name = streaks[index].first.toString(),
-                            icon = streaks[index].second,
-                            symbol = if (streaks[index].first == "Daily Streak") "days" else "weeks",
-                            data = 5,
-                            milestone = 10,
-                            color = streaks[index].third,
+                    items(streaks.size) { index ->
+                        val streakInfo = streaks[index]
+                        val nextMilestone = streakInfo.milestone.firstOrNull { it > streakInfo.currentStreak }
+                            ?: streakInfo.milestone.lastOrNull()
+                            ?: 10
+                        TrackingCard(
+                            name = streakInfo.name,
+                            icon = streakInfo.icon,
+                            symbol = if (streakInfo.name == "Daily Streak") "days" else "weeks",
+                            data = streakInfo.currentStreak,
+                            milestone = nextMilestone,
+                            color = streakInfo.color,
                         )
                     }
                 }
