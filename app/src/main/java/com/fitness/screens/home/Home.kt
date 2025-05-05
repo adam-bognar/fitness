@@ -119,7 +119,7 @@ fun Home(
                     columns = GridCells.Fixed(2),
                 ) {
                     items(activities.size) { index ->
-                        val (name, icon, gradientColors) = activities[index] // Destructure Triple
+                        val (name, icon, gradientColors) = activities[index]
 
                         ActivityCard(
                             name = name,
@@ -130,13 +130,6 @@ fun Home(
                     }
                 }
 
-//                Button(
-//                    onClick = { onNavigate("CAMERA") },
-//                    modifier = Modifier
-//                        .padding(16.dp)
-//                ) {
-//                    Text("open camera")
-//                }
 
 
             }

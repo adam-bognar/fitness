@@ -17,19 +17,17 @@ class SendDataRepository @Inject constructor(
     override fun sendMessage(message: String) {
         Wearable.getNodeClient(context).connectedNodes.addOnSuccessListener { nodes ->
             for (node in nodes) {
-                if (node.isNearby) {  // Check if the node is reachable
+                if (node.isNearby) {
                     Wearable.getMessageClient(context).sendMessage(
                         node.id,
                         MESSAGE_PATH_SEND,
                         message.toByteArray(Charsets.UTF_8)
                     )
                         .addOnSuccessListener {
-                            // Handle success here with a toast
                             Log.d("WearOSLog", "Message sent successfully to ${node.id}")
                             Log.d("WearOSLog", message)
                         }
                         .addOnFailureListener { exception ->
-                            // Handle failure here with a toast
                             Log.e("WearOSLog", "Failed to send message to ${node.id}", exception)
                             Log.d("WearOSLog", message)
 
@@ -39,7 +37,6 @@ class SendDataRepository @Inject constructor(
                 }
             }
         }.addOnFailureListener { exception ->
-            // Handle failure to get connected nodes here
             Log.e("WearOSLog", "Failed to get connected nodes", exception)
         }
     }

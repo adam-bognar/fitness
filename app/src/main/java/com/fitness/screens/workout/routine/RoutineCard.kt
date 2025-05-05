@@ -52,7 +52,6 @@ fun RoutineCard(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Routine Name
             Text(
                 text = routine.name,
                 style = MaterialTheme.typography.titleLarge,
@@ -60,7 +59,6 @@ fun RoutineCard(
                 modifier = Modifier.weight(1f)
             )
 
-            // Icons Row
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {

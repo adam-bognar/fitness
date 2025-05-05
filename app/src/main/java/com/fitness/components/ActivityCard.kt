@@ -30,7 +30,7 @@ fun ActivityCard(
     onStart: (String) -> Unit,
 ) {
     val gradient = Brush.linearGradient(
-        colors = if (gradientColors.size >= 2) gradientColors else listOf(Color.Gray, Color.DarkGray) // Fallback colors
+        colors = if (gradientColors.size >= 2) gradientColors else listOf(Color.Gray, Color.DarkGray)
     )
 
 
@@ -65,7 +65,7 @@ fun ActivityCardPreview() {
     ActivityCard(
         name = "Workout",
         icon = painterResource(id = R.drawable.exercise),
-        gradientColors = listOf(Color(0xFF7B1FA2), Color(0xFFE91E63)), // Purple to Pink gradient
+        gradientColors = listOf(Color(0xFF7B1FA2), Color(0xFFE91E63)),
         onStart = {}
     )
 }

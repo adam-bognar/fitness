@@ -33,7 +33,7 @@ import com.fitness.R
 @Composable
 fun TopAppBar(
     alignment: Alignment.Horizontal,
-    onBack: (() -> Unit)? = null // Nullable function, required only when centered
+    onBack: (() -> Unit)? = null
 ) {
     val gradient = Brush.linearGradient(
         colors = listOf(

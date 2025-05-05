@@ -38,7 +38,7 @@ class StepTrackingRepository @Inject constructor(
     override fun onSensorChanged(event: SensorEvent?) {
         if (event?.sensor?.type == Sensor.TYPE_STEP_COUNTER) {
             if (initialStepsCount == null) {
-                initialStepsCount = event.values[0].toInt() // Set baseline
+                initialStepsCount = event.values[0].toInt()
             }
             _stepCount.value = event.values[0].toInt() - initialStepsCount!!
         }

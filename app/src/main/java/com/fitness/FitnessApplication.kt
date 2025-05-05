@@ -12,22 +12,6 @@ class FitnessApplication : Application(){
         super.onCreate()
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-//            val channel = NotificationChannel(
-//                "step_channel",
-//                "Step Channel",
-//                NotificationManager.IMPORTANCE_DEFAULT
-//            )
-//            val channel2 = NotificationChannel(
-//                "location",
-//                "Location Channel",
-//                NotificationManager.IMPORTANCE_LOW
-//            )
-//
-//            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-//            notificationManager.createNotificationChannel(channel)
-//
-//            val notificationManager2 = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-//            notificationManager2.createNotificationChannel(channel2)
 
             val channel = NotificationChannel(
                 "running_channel",

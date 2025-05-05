@@ -148,7 +148,6 @@ fun SpinningGradientCircle(elapsedTime: Int) {
     }
 }
 
-// Function to format time as hh:mm:ss
 fun formatElapsedTime(seconds: Int): String {
     val hours = seconds / 3600
     val minutes = (seconds % 3600) / 60
