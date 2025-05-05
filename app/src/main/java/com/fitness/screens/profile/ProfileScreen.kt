@@ -1,5 +1,7 @@
 package com.fitness.screens.profile
 
+import ExerciseProgressChart
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -19,12 +21,19 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,14 +51,20 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.fitness.R
 import com.fitness.data.repository.session.SessionViewModel
 import com.fitness.data.running.RunningViewModel
+import com.fitness.model.gym.ExerciseLog
 import com.fitness.navigation.Screen
 import com.fitness.screens.home.BottomBar
 import com.fitness.screens.home.TopAppBar
 import com.google.firebase.Timestamp
 import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Locale
 
+data class ExerciseProgressPoint(val date: Timestamp, val value: Double)
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
     onNavigate: (String) -> Unit,
@@ -59,27 +74,68 @@ fun ProfileScreen(
 ) {
     var workoutActive by remember { mutableStateOf(true) }
 
-    val session = sessionViewModel.list.collectAsState().value
-    val runningSession = runningViewModel.runningSessions.collectAsState().value
+    val sessions by sessionViewModel.list.collectAsState()
+    val runningSession by runningViewModel.runningSessions.collectAsState()
 
-    var sampleWorkouts = listOf(
-        Pair("Chest", "2021-09-01"),
-        Pair("Legs", "2021-09-02"),
-        Pair("Shoulders", "2021-09-03"),
-        Pair("Back", "2021-09-04"),
-        Pair("Biceps", "2021-09-05"),
-        Pair("Triceps", "2021-09-06"),
-    )
+    val uniqueExerciseNames by remember {
+        derivedStateOf {
+            sessions
+                .flatMap { it.log }
+                .map { it.name }
+                .filter { it.isNotBlank() }
+                .distinct()
+                .sorted()
+        }
+    }
 
-    var sampleRuns = listOf(
-        Pair("Run", "2021-09-01"),
-        Pair("Run", "2021-09-02"),
-        Pair("Run", "2021-09-03"),
-        Pair("Run", "2021-09-04"),
-        Pair("Run", "2021-09-05"),
-        Pair("Run", "2021-09-06"),
-    )
+    var expanded by remember { mutableStateOf(false) }
+    var selectedExerciseName by remember { mutableStateOf<String?>(null) }
 
+    val filteredSessions by remember(sessions, selectedExerciseName) {
+        derivedStateOf {
+            val selectedName = selectedExerciseName
+            if (!workoutActive || selectedName == null) {
+                sessions
+            } else {
+                sessions.filter { session ->
+                    session.log.any { exercise -> exercise.name == selectedName }
+                }
+            }
+        }
+    }
+
+    var exerciseProgressDataState by remember { mutableStateOf<List<ExerciseLog>>(emptyList()) }
+    var isCalculatingProgress by remember { mutableStateOf(false) }
+
+    LaunchedEffect(sessions, selectedExerciseName, workoutActive) {
+        val selectedName = selectedExerciseName
+        if (!workoutActive || selectedName == null) {
+            exerciseProgressDataState = emptyList()
+            isCalculatingProgress = false
+            return@LaunchedEffect
+        }
+
+        isCalculatingProgress = true
+        val calculatedData = withContext(Dispatchers.Default) {
+            sessions
+                .filter { it.date != null }
+                .sortedBy { it.date }
+                .mapNotNull { session ->
+                    val exercisePerformance =
+                        session.log.find { it.name == selectedName }?.lastLog
+
+                    exercisePerformance
+                }
+        }
+        exerciseProgressDataState = calculatedData
+        isCalculatingProgress = false
+    }
+
+    LaunchedEffect(uniqueExerciseNames) {
+        if (selectedExerciseName != null && selectedExerciseName !in uniqueExerciseNames) {
+            selectedExerciseName = null
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -149,7 +205,7 @@ fun ProfileScreen(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         TotalCard(
-                            total = session.size,
+                            total = sessions.size,
                             title = "Total Workouts",
                         )
                         TotalCard(
@@ -175,6 +231,8 @@ fun ProfileScreen(
                         Button(
                             onClick = {
                                 workoutActive = true
+                                selectedExerciseName = null
+                                expanded = false
                             },
                             shape = RoundedCornerShape(topStart = 10.dp, bottomStart = 10.dp),
                             colors = if(!workoutActive) ButtonDefaults.buttonColors(Color.White) else ButtonDefaults.buttonColors(colorResource(R.color.purple)),
@@ -189,6 +247,8 @@ fun ProfileScreen(
                         Button(
                             onClick = {
                                 workoutActive = false
+                                selectedExerciseName = null
+                                expanded = false
                             },
                             shape = RoundedCornerShape(topEnd = 10.dp, bottomEnd = 10.dp),
                             colors = if(workoutActive) ButtonDefaults.buttonColors(Color.White) else ButtonDefaults.buttonColors(colorResource(R.color.purple)),
@@ -201,17 +261,64 @@ fun ProfileScreen(
                         }
                     }
 
+                    if (workoutActive && uniqueExerciseNames.isNotEmpty()) {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        ExposedDropdownMenuBox(
+                            expanded = expanded,
+                            onExpandedChange = { expanded = !expanded },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            TextField(
+                                value = selectedExerciseName ?: "Select Exercise",
+                                onValueChange = {},
+                                readOnly = true,
+                                label = { Text("Exercise") },
+                                trailingIcon = {
+                                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                                },
+                                modifier = Modifier
+                                    .menuAnchor()
+                                    .fillMaxWidth()
+                            )
+                            ExposedDropdownMenu(
+                                expanded = expanded,
+                                onDismissRequest = { expanded = false }
+                            ) {
+                                uniqueExerciseNames.forEach { exerciseName ->
+                                    DropdownMenuItem(
+                                        text = { Text(exerciseName) },
+                                        onClick = {
+                                            selectedExerciseName = exerciseName
+                                            expanded = false
+                                        }
+                                    )
+                                }
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
+
+                    if (workoutActive && selectedExerciseName != null) {
+                        if (isCalculatingProgress) {
+                            Spacer(modifier = Modifier.height(200.dp).fillMaxWidth())
+                        } else {
+                            ExerciseProgressChart(
+                                data = exerciseProgressDataState,
+                                exerciseName = selectedExerciseName ?: "Exercise"
+                            )
+                            Log.d("ExerciseProgress", "Data: $exerciseProgressDataState")
+                        }
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
+
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         if (workoutActive) {
-                            items(session.size) { index ->
-                                val session = session[index]
-                                var date = "Error"
-                                if(session.date != null) {
-                                    date = formatFirebaseTimestamp(session.date)
-                                }
+                            items(filteredSessions.size) { index ->
+                                val session = filteredSessions[index]
+                                val date = session.date?.let { formatFirebaseTimestamp(it) } ?: "Error"
                                 HistoryCard(
                                     title = session.name,
                                     date = date,
@@ -221,10 +328,7 @@ fun ProfileScreen(
                         } else {
                             items(runningSession.size) { index ->
                                 val session = runningSession[index]
-                                var date = "Error"
-                                if(session.date != null) {
-                                    date = formatFirebaseTimestamp(session.date)
-                                }
+                                val date = session.date?.let { formatFirebaseTimestamp(it) } ?: "Error"
 
                                 val sessionJson = Gson().toJson(session)
                                 HistoryCard(
@@ -238,8 +342,6 @@ fun ProfileScreen(
                         }
 
                     }
-
-
                 }
             }
         }

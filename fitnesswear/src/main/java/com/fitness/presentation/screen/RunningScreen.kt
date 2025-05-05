@@ -35,7 +35,6 @@ fun RunningScreen(
     viewModel: RunningViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.collectAsStateWithLifecycle()
-    //state.
 
     val context = LocalContext.current
     val isRunning = state.value.running
@@ -89,7 +88,6 @@ fun RunningScreen(
 
 
 
-// Function to format time as hh:mm:ss
 fun formatElapsedTime(seconds: Int): String {
     val hours = seconds / 3600
     val minutes = (seconds % 3600) / 60

@@ -101,7 +101,6 @@ fun WorkoutItem(
                         logs[index] = RepsToWeight(reps = repsValue, weight = kgValue)
                         Log.d("WorkoutItem", "Updated set $index: ${logs[index]}")
 
-                        // Send update up
                         onUpdate(exercise.copy(lastLog = ExerciseLog(id = 0, sets = logs)))
                         onDoneClick()
                     }

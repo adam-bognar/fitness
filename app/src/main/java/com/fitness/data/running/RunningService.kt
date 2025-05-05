@@ -107,17 +107,16 @@ class RunningService : Service() {
 
         startForeground(1, createNotification())
 
-        startTime = SystemClock.elapsedRealtime() // Capture start time
+        startTime = SystemClock.elapsedRealtime()
 
         serviceScope.launch {
             while (true) {
                 elapsedTime = ((SystemClock.elapsedRealtime() - startTime) / 1000).toInt()
                 updateNotification()
-                delay(1000L) // Update every second
+                delay(1000L)
             }
         }
 
-        // Start step tracking
         stepTrackingRepository.startTracking()
         serviceScope.launch {
             stepTrackingRepository.stepCount.collectLatest { steps ->
@@ -126,8 +125,7 @@ class RunningService : Service() {
             }
         }
 
-        // Start location tracking
-        locationClient.getLocationUpdates(5000L) // Update every 5 seconds
+        locationClient.getLocationUpdates(5000L)
             .catch { e -> e.printStackTrace() }
             .onEach { location ->
                 currentLocation = "Lat: ${location.latitude}, Lon: ${location.longitude}"

@@ -31,7 +31,7 @@ class StepService : Service() {
             Actions.START.toString() -> {
                 start()
                 stepTrackingRepository.startTracking()
-                observeStepCount() // Start observing step count updates
+                observeStepCount()
             }
             Actions.STOP.toString() -> {
                 stopSelf()
@@ -42,14 +42,14 @@ class StepService : Service() {
     }
 
     private fun start() {
-        val notification = createNotification(0) // Initially 0 steps
-        startForeground(1, notification) // Set foreground service (no sound)
+        val notification = createNotification(0)
+        startForeground(1, notification)
     }
 
     private fun observeStepCount() {
         serviceScope.launch {
             stepTrackingRepository.stepCount.collectLatest { steps ->
-                updateNotification(steps) // Silently update notification
+                updateNotification(steps)
             }
         }
     }
@@ -59,17 +59,17 @@ class StepService : Service() {
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle("FitTrack")
             .setContentText("$steps steps")
-            .setSilent(true) // Prevent sound on update
+            .setSilent(true)
             .build()
 
     private fun updateNotification(steps: Int) {
         val notification = createNotification(steps)
-        notificationManager.notify(1, notification) // Silent update
+        notificationManager.notify(1, notification)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        serviceScope.cancel() // Cancel coroutines when service stops
+        serviceScope.cancel()
     }
 
     override fun onBind(intent: Intent?): IBinder? = null

@@ -1,6 +1,7 @@
 [versions]
 agp = "8.9.2"
 cameraCore = "1.4.2"
+composeM3 = "1.14.0"
 firebaseBom = "33.9.0"
 kotlin = "2.0.0"
 coreKtx = "1.15.0"
@@ -12,6 +13,7 @@ activityCompose = "1.10.0"
 composeBom = "2025.01.01"
 lifecycleVersion = "2.8.7"
 mapsCompose = "2.11.4"
+mpandroidchart = "v3.1.0"
 navigationCompose = "2.8.6"
 firebaseAuthKtx = "23.2.0"
 hilt = "2.51.1"
@@ -30,6 +32,7 @@ composeMaterial = "1.2.1"
 composeFoundation = "1.2.1"
 wearToolingPreview = "1.0.0"
 coreSplashscreen = "1.0.1"
+vico = "1.15.0"
 
 [libraries]
 androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraCore" }
@@ -65,6 +68,7 @@ firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-fires
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 firebase-crashlytics-buildtools = { group = "com.google.firebase", name = "firebase-crashlytics-buildtools", version.ref = "firebaseCrashlyticsBuildtools" }
 maps-compose = { module = "com.google.maps.android:maps-compose", version.ref = "mapsCompose" }
+mpandroidchart = { module = "com.github.PhilJay:MPAndroidChart", version.ref = "mpandroidchart" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMaps" }
 pose-detection = { module = "com.google.mlkit:pose-detection", version.ref = "poseDetection" }
@@ -74,6 +78,10 @@ androidx-compose-material = { group = "androidx.wear.compose", name = "compose-m
 androidx-compose-foundation = { group = "androidx.wear.compose", name = "compose-foundation", version.ref = "composeFoundation" }
 androidx-wear-tooling-preview = { group = "androidx.wear", name = "wear-tooling-preview", version.ref = "wearToolingPreview" }
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
+vico-compose      = { group = "com.patrykandpatrick.vico", name = "compose",      version.ref = "vico" }
+vico-compose-m3   = { group = "com.patrykandpatrick.vico", name = "compose-m3",   version.ref = "vico" }
+vico-core         = { group = "com.patrykandpatrick.vico", name = "core",         version.ref = "vico" }
+
 
 
 

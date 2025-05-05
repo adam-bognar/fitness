@@ -43,7 +43,7 @@ fun AddExerciseButton(
             Icon(
                 imageVector = Icons.Default.Add,
                 contentDescription = "Add Routine",
-                tint = Color(0xFF4285F4) // Google Blue shade
+                tint = Color(0xFF4285F4)
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(

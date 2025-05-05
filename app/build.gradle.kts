@@ -89,5 +89,11 @@ dependencies {
     implementation(libs.androidx.runtime.livedata)
 
 
+    implementation(libs.mpandroidchart)
+
+
+
+
+
 
 }
