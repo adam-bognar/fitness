@@ -7,7 +7,6 @@
 6. GPS tracking. 03.27
 7. Wearable Device Integration – Sync with smartwatches. 04.10
 8. Reps & Form Detection – Use phone sensors to count reps. 04.24
-9. Voice Assistant Commands – Control workouts via voice. 05.08
 
 - User authentication using firebase custom auth ✅
 - Workout Plans ✅
