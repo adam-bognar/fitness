@@ -78,7 +78,8 @@ fun SelectExercisePopUp(
                     IconButton(onClick = onDismiss) {
                         Icon(
                             imageVector = Icons.Default.Close,
-                            contentDescription = "Close"
+                            contentDescription = "Close",
+                            tint = Color.Black,
                         )
                     }
                 }

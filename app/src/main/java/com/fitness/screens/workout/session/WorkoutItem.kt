@@ -82,10 +82,10 @@ fun WorkoutItem(
                 Spacer(modifier = Modifier.weight(0.5f))
             }
             Text("SET", Modifier.weight(1f), color = Color.Black, textAlign = TextAlign.Center)
-            Text("PREVIOUS", Modifier.weight(1f), textAlign = TextAlign.Center)
-            Text("KG", Modifier.weight(1f), textAlign = TextAlign.Center)
-            Text("REPS", Modifier.weight(1f), textAlign = TextAlign.Center)
-            Text("DONE", Modifier.weight(1f), textAlign = TextAlign.Center)
+            Text("PREVIOUS", Modifier.weight(1f), color = Color.Black, textAlign = TextAlign.Center)
+            Text("KG", Modifier.weight(1f), color = Color.Black, textAlign = TextAlign.Center)
+            Text("REPS", Modifier.weight(1f), color = Color.Black, textAlign = TextAlign.Center)
+            Text("DONE", Modifier.weight(1f), color = Color.Black, textAlign = TextAlign.Center)
         }
 
         logs.forEachIndexed { index, log ->

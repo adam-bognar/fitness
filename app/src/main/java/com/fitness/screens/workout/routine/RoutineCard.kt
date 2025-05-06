@@ -56,7 +56,8 @@ fun RoutineCard(
                 text = routine.name,
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                color = Color.Black
             )
 
             Row(

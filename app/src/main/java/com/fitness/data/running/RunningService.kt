@@ -71,7 +71,8 @@ class RunningService : Service() {
         Log.d("RunningService", "stopTracking called")
 
         val mycoords = coords.map { MyLatLng(it.latitude, it.longitude) }
-        val distance = RunningSession().calculateTotalDistance(coords)
+        val distance = RunningSession().calculateTotalDistance(mycoords.map { it.toLatLng() })
+
 
         val id = runningRepository.highestId()
         Log.d("RunningService", "Highest ID: $id")

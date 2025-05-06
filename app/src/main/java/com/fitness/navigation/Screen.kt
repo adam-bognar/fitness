@@ -14,4 +14,5 @@ sealed class Screen(val route: String) {
     object RUNNING : Screen("RUNNING")
     object PROFILE : Screen("PROFILE")
     object CAMERA : Screen("CAMERA")
+    object SESSION : Screen("SESSION")
 }

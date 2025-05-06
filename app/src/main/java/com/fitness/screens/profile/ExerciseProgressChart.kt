@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.fitness.model.gym.ExerciseLog
@@ -32,7 +33,7 @@ fun ExerciseProgressChart(
             .fillMaxWidth()
             .height(200.dp),
         elevation = CardDefaults.cardElevation(4.dp),
-        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface)
+        colors = CardDefaults.cardColors(Color.White),
     ) {
         if (data.isEmpty()) {
             Box(
@@ -42,7 +43,7 @@ fun ExerciseProgressChart(
                 Text(
                     "No progress data available for '$exerciseName'.",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = Color.Black,
                 )
             }
             return@Card

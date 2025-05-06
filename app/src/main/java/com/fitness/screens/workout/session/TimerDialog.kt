@@ -105,7 +105,6 @@ fun TimerDialog(
                 )
             }
 
-            // Time Picker Row
             Row(
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -137,6 +136,7 @@ fun TimerDialog(
                 Text(
                     "Save", color = Color.Black,
                     style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold)
+
                 )
             }
         }

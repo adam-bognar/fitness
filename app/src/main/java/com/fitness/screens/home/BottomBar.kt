@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -41,11 +42,13 @@ fun BottomBar(
             ) {
                 Icon(
                     imageVector = Icons.Default.Home,
-                    contentDescription = "Home"
+                    contentDescription = "Home",
+                    tint = Color.Black
                 )
             }
             Text(
                 text = "Home",
+                color = Color.Black
             )
         }
         Column(
@@ -55,11 +58,13 @@ fun BottomBar(
             ) {
                 Icon(
                     imageVector = Icons.Default.PieChart,
-                    contentDescription = "macros"
+                    contentDescription = "macros",
+                    tint = Color.Black
                 )
             }
             Text(
                 text = "Macros",
+                color = Color.Black
             )
         }
         Column(
@@ -69,11 +74,13 @@ fun BottomBar(
             ) {
                 Icon(
                     imageVector = Icons.Default.Person,
-                    contentDescription = "profile"
+                    contentDescription = "profile",
+                    tint = Color.Black
                 )
             }
             Text(
                 text = "Profile",
+                color = Color.Black
             )
         }
     }

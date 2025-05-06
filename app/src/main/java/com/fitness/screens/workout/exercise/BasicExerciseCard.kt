@@ -31,6 +31,7 @@ fun BasicExerciseCard(
         Text(
             text = name,
             style = MaterialTheme.typography.titleLarge,
+            color = Color.Black
         )
     }
 }

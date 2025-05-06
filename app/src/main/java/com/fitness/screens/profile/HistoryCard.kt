@@ -45,7 +45,8 @@ fun HistoryCard(
         ){
             Text(
                 text = title,
-                style = MaterialTheme.typography.headlineMedium
+                style = MaterialTheme.typography.headlineMedium,
+                color = Color.Black
             )
             Text(
                 text = date,
