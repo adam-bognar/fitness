@@ -137,6 +137,7 @@ fun WorkoutPage(
                             Icon(
                                 imageVector = Icons.Default.Timer,
                                 contentDescription = "Timer",
+                                tint = Color.Black
                             )
                         }
                         Button(
@@ -154,7 +155,8 @@ fun WorkoutPage(
                         ) {
                             Text(
                                 "Finish",
-                                style = MaterialTheme.typography.titleMedium
+                                style = MaterialTheme.typography.titleMedium,
+                                color = Color.Black
                             )
                         }
                     }

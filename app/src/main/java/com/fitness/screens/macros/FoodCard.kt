@@ -66,6 +66,7 @@ fun FoodCard(
         Text(
             text = "$calories kcal",
             style = MaterialTheme.typography.headlineSmall,
+            color = Color.Black
         )
         Spacer(modifier = Modifier.height(16.dp))
         Row(

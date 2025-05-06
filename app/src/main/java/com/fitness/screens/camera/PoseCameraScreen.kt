@@ -159,7 +159,7 @@ fun PoseCameraScreen(
                 color = Color.White
             )
             Text(
-                text = "Set: $set",
+                text = "Exercise: $exercise",
                 fontSize = 32.sp,
                 color = Color.White
             )

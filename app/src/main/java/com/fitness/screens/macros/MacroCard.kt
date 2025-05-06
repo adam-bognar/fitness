@@ -54,7 +54,8 @@ fun MacroCard(
                 Text(
                     text = if (value % 1 == 0f) "${value.toInt()}" else "%.1f".format(value).replace(",", "."),
                     style = MaterialTheme.typography.headlineMedium,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
                 )
                 Text(
                     text = "/ $target $unit",

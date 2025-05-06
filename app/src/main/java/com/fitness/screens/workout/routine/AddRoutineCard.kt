@@ -79,7 +79,7 @@ fun AddRoutineCard(
                     colorResource(id = R.color.light_blue),
                 )
             ) {
-                Text("Create")
+                Text("Create", color = Color.Black)
             }
         }
     }

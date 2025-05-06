@@ -70,7 +70,7 @@ fun ProfileScreen(
     onNavigate: (String) -> Unit,
     sessionViewModel: SessionViewModel = hiltViewModel(),
     runningViewModel: RunningViewModel = hiltViewModel(),
-
+    signOutViewModel: SignOutViewModel = hiltViewModel()
 ) {
     var workoutActive by remember { mutableStateOf(true) }
 
@@ -178,10 +178,10 @@ fun ProfileScreen(
 
                         Spacer(modifier = Modifier.size(8.dp))
 
-                        Text(text = "Charles Leclerc", style = MaterialTheme.typography.titleMedium)
+                        Text(text = "Charles Leclerc", style = MaterialTheme.typography.titleMedium, color = Color.Black)
 
                         Button(
-                            onClick = { /*TODO*/ },
+                            onClick = { signOutViewModel.signOut(onNavigate) },
                             shape = RoundedCornerShape(10.dp),
                             colors = ButtonDefaults.buttonColors(Color.White),
                             modifier = Modifier
@@ -224,6 +224,7 @@ fun ProfileScreen(
                         "Activity history",
                         style = MaterialTheme.typography.headlineMedium,
                         fontWeight = FontWeight.Bold,
+                        color = Color.Black,
                     )
                     Row(
                         modifier = Modifier.fillMaxWidth()
@@ -319,10 +320,14 @@ fun ProfileScreen(
                             items(filteredSessions.size) { index ->
                                 val session = filteredSessions[index]
                                 val date = session.date?.let { formatFirebaseTimestamp(it) } ?: "Error"
+
+                                val sessionJson = Gson().toJson(session)
                                 HistoryCard(
                                     title = session.name,
                                     date = date,
-                                    onViewDetails = {}
+                                    onViewDetails = {
+                                        onNavigate("${Screen.SESSION.route}/$sessionJson")
+                                    }
                                 )
                             }
                         } else {

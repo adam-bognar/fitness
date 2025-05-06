@@ -87,6 +87,7 @@ fun AddFood(
                         text = "Add Food",
                         style = MaterialTheme.typography.headlineMedium,
                         fontWeight = FontWeight.Bold,
+                        color = Color.Black,
                     )
 
                     IconButton(
@@ -97,7 +98,8 @@ fun AddFood(
                         Icon(
                             imageVector = Icons.Default.KeyboardArrowDown,
                             contentDescription = "Close",
-                            modifier = Modifier.size(38.dp)
+                            modifier = Modifier.size(38.dp),
+                            tint = Color.Black
                         )
                     }
                 }
@@ -152,6 +154,7 @@ fun AddFood(
            ) {
                Text(
                    "Add Food",
+                     color = Color.Black,
                )
            }
        }}

@@ -108,7 +108,8 @@ fun Settings(
                         Icon(
                             imageVector = Icons.Default.KeyboardArrowDown,
                             contentDescription = "Close",
-                            modifier = Modifier.size(38.dp)
+                            modifier = Modifier.size(38.dp),
+                            tint = Color.Black
                         )
                     }
                 }
@@ -202,7 +203,10 @@ fun Settings(
                                     activityLevelExpanded = false
                                 },
                                 text = {
-                                    Text(it.toString())
+                                    Text(
+                                        it.toString(),
+                                        color = Color.Black
+                                    )
                                 }
                             )
                         }
@@ -239,7 +243,9 @@ fun Settings(
                                     goalExpanded = false
                                 },
                                 text = {
-                                    Text(it.toString())
+                                    Text(
+                                        it.toString(),
+                                        color = Color.Black)
                                 }
                             )
                         }
@@ -269,6 +275,7 @@ fun Settings(
                 ) {
                     Text(
                         "Save",
+                        color = Color.Black,
                     )
                 }
             }

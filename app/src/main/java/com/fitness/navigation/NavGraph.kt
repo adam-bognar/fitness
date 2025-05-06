@@ -10,12 +10,14 @@ import androidx.navigation.navArgument
 import com.fitness.UploadJsonScreen
 import com.fitness.data.running.RunningSession
 import com.fitness.model.gym.Routine
+import com.fitness.model.gym.Session
 import com.fitness.screens.Running.RunningScreen
 import com.fitness.screens.camera.PoseCameraScreen
 import com.fitness.screens.home.Home
 import com.fitness.screens.macros.Macros
 import com.fitness.screens.map.MyMapScreen
 import com.fitness.screens.profile.ProfileScreen
+import com.fitness.screens.profile.WorkoutSessionDetailScreen
 import com.fitness.screens.sign_in.SignIn
 import com.fitness.screens.sign_up.SignUp
 import com.fitness.screens.splash.Splash
@@ -138,6 +140,22 @@ fun NavGraph(
                 },
                 navController = navController,
             )
+        }
+
+        composable(
+            route = "${Screen.SESSION.route}/{session}",
+            arguments = listOf(navArgument("session") { type = NavType.StringType })
+        ){backStackEntry ->
+            val sessionJson = backStackEntry.arguments?.getString("session")
+            val session = Gson().fromJson(sessionJson, Session::class.java)
+            WorkoutSessionDetailScreen(
+                session = session,
+                onNavigateBack = {
+                    navController.popBackStack()
+                }
+            )
+
+
         }
 
         composable(

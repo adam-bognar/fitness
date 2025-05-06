@@ -83,6 +83,7 @@ fun DataRow(
                 .weight(1f)
                 .height(24.dp),
             textAlign = TextAlign.Center,
+            color = Color.Black
         )
         Text(
             text = "${previous.weight}kg x ${previous.reps}",
@@ -90,7 +91,7 @@ fun DataRow(
                 .weight(1f)
                 .height(24.dp),
             textAlign = TextAlign.Center,
-            style = TextStyle(color = Color.Gray)
+            style = TextStyle(color = Color.Gray),
 
         )
         PlaceholderTextField(

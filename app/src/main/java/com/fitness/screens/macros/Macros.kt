@@ -138,6 +138,7 @@ fun Macros(
                             text = "Macros",
                             style = MaterialTheme.typography.headlineMedium,
                             fontWeight = FontWeight.Bold,
+                            color = Color.Black
                         )
                         IconButton(
                             onClick = {
@@ -147,7 +148,8 @@ fun Macros(
                             Icon(
                                 imageVector = Icons.Default.Settings,
                                 contentDescription = "Settings",
-                                Modifier.size(28.dp)
+                                Modifier.size(28.dp),
+                                tint = Color.Black
                             )
                         }
                     }
@@ -155,6 +157,7 @@ fun Macros(
                         text = "Please fill in your information to get started",
                         style = MaterialTheme.typography.headlineMedium,
                         fontWeight = FontWeight.Bold,
+                        color = Color.Black,
                     )
                 }
             }
@@ -210,7 +213,8 @@ fun Macros(
                     ) {
                         Icon(
                             imageVector = Icons.Default.Add,
-                            contentDescription = "Add Macro"
+                            contentDescription = "Add Macro",
+                            tint = Color.Black,
                         )
                     }
 
@@ -232,6 +236,7 @@ fun Macros(
                             text = "Macros",
                             style = MaterialTheme.typography.headlineMedium,
                             fontWeight = FontWeight.Bold,
+                            color = Color.Black
                         )
                         IconButton(
                             onClick = {
@@ -241,7 +246,8 @@ fun Macros(
                             Icon(
                                 imageVector = Icons.Default.Settings,
                                 contentDescription = "Settings",
-                                Modifier.size(28.dp)
+                                Modifier.size(28.dp),
+                                tint = Color.Black
                             )
                         }
                     }
@@ -294,7 +300,8 @@ fun Macros(
                         text = "Today's foods",
                         style = MaterialTheme.typography.headlineMedium,
                         fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(top = 16.dp)
+                        modifier = Modifier.padding(top = 16.dp),
+                        color = Color.Black
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))

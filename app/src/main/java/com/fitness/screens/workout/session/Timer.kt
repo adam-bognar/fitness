@@ -135,7 +135,6 @@ fun CustomProgressBar(
             cornerRadius = CornerRadius(cornerRadius.toPx())
         )
 
-        // Draw the progress
         drawRoundRect(
             color = color,
             size = size.copy(width = size.width * progress, height = size.height),
